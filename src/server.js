@@ -12,7 +12,7 @@ import authorsRouter from "./authors/index.js"
 // TELL THE SERVER ABOUT THE ROUTE
 
 const server = express();
-const PORT = 3002;
+const PORT = 3003;
 
 server.use(cors());
 
@@ -26,4 +26,8 @@ console.log(listEndpoints(server))
 server.listen(PORT, ()=> console.log("server is running on port:", PORT))
 
 server.on('error', (error)=>console.log(`server is not running due to: ${error}`))
+
+// for already in use error run 
+// lsof -i:3000 
+// kill -9 [PID] 
 
