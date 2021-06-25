@@ -1,7 +1,8 @@
 {
-  "name": "Strive-Blog",
+  "name": "strive-blog",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "dependencies": {
     "cors": "^2.8.5",
@@ -12,7 +13,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
