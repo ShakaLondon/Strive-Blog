@@ -85,7 +85,6 @@ router.get("/:id", async (req, res, next) => {
         res
         .status(404)
         .send({message: `Author with ${req.params.id} is not found!`});
-        return;
     }
 
     res.send(author)
@@ -99,6 +98,32 @@ router.get("/:id", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   try {
+    const fileAsBuffer = fs.readFileSync(authorsFilePath);
+    // read json file
+    const fileAsString = fileAsBuffer.toString();
+    // convert JSON to string
+    let fileAsJSONArray = JSON.parse(fileAsString);
+    // read as an array
+
+    const author = fileAsJSONArray.find(author => author.id=== req.params.id);
+
+    // get result then if error say not found
+
+    if (!author){
+        res
+        .status(404)
+        .send({message: `Author with ${req.params.id} is not found!`});
+    };
+
+    // to delete entry
+
+    fileAsJSONArray = fileAsJSONArray.filter((author) => author.id !== req.params.id);
+    //  return all entries except the one being deleted
+
+    fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+
+    res.status(204).send();
+    
   } catch (error) {
     res.send(500).send({ message: error.message });
   }
@@ -108,8 +133,39 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
+    const fileAsBuffer = fs.readFileSync(authorsFilePath);
+    // read json file
+    const fileAsString = fileAsBuffer.toString();
+    // convert JSON to string
+    let fileAsJSONArray = JSON.parse(fileAsString);
+    // read as an array
+
+    const authorIndex = fileAsJSONArray.findIndex(author => author.id=== req.params.id);
+
+    // get index of result to replace it
+
+    if (!authorIndex == -1){
+        res
+        .status(404)
+        .send({message: `Author with ${req.params.id} is not found!`});
+    };
+
+    // to delete entry
+
+    const previousAuthorData = fileAsJSONArray[authorIndex]
+
+    const changedAuthor = { ...previousAuthorData, ...req.body, updatedAt: new Date(), id: req.params.id}
+
+    fileAsJSONArray[authorIndex] = changedAuthor
+
+    fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+
+    res.send(changedAuthornode);
+    
   } catch (error) {
+
     res.send(500).send({ message: error.message });
+
   }
 });
 
