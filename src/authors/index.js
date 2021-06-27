@@ -59,18 +59,21 @@ router.post("/", async (req, res, next) => {
 
     const fileAsJSONArray = JSON.parse(fileAsString);
 
-    const emailDuplicate = fileAsJSONArray.findIndex( (author) => author.email == req.params.email )
+    const emailDuplicate = fileAsJSONArray.findIndex( (author) => author.email == req.body.email )
 
 
 
-    if (emailDuplicate !== -1) {
+    if (emailDuplicate != -1) {
+
+      req.body.emailCheck = true
+
+      const feedBack = {...req.body}
+      
 
         res
         .status(404)
-        .send({message: `Author with ${req.params.email} already exists!
-        ${author}`});
-
-        req.params.emailCheck = true;
+        .send({message: `Author with ${req.body.email} already exists!`}
+        );
 
     } else {
 
