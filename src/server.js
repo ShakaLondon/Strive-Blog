@@ -9,6 +9,7 @@ import listEndpoints from "express-list-endpoints";
 // REMEMBER TO UPDATE START SCRIPT IN PACKAGE JSON
 
 import authorsRouter from "./authors/index.js"
+import blogsRouter from "./blog-posts/index.js"
 // TELL THE SERVER ABOUT THE ROUTE
 
 const server = express();
@@ -19,6 +20,7 @@ server.use(cors());
 server.use(express.json());
 
 server.use("/authors", authorsRouter);
+server.use("/blogs", blogsRouter);
 // TELL SERVER YOU WANT TO USE THIS
 
 console.log(listEndpoints(server))
