@@ -39,7 +39,7 @@ router.get("/", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { name, surname, email, dateOfBirth } = req.body;
+    const { name, surname, email, dateOfBirth, } = req.body;
 
     const author = {
       id: uniqid(),
@@ -47,6 +47,7 @@ router.post("/", async (req, res, next) => {
       surname,
       email,
       dateOfBirth,
+      emailCheck: false,
       avatar: `https://ui-avatars.com/api/?name=${name}+${surname}`,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -58,11 +59,31 @@ router.post("/", async (req, res, next) => {
 
     const fileAsJSONArray = JSON.parse(fileAsString);
 
-    fileAsJSONArray.push(author);
+    const emailDuplicate = fileAsJSONArray.findIndex( (author) => author.email == req.params.email )
 
-    fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
 
-    res.send(author);
+
+    if (emailDuplicate !== -1) {
+
+        res
+        .status(404)
+        .send({message: `Author with ${req.params.email} already exists!
+        ${author}`});
+
+        req.params.emailCheck = true;
+
+    } else {
+
+        fileAsJSONArray.push(author);
+
+        fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+    
+        res.send(author);
+
+    };
+
+    // to delete entry
+    
   } catch (error) {
     res.send(500).send({ message: error.message });
   }
