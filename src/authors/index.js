@@ -7,6 +7,10 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 // USE TO LOCATE FILE
 
+import { userValidationRules, validate } from "./validation.js"
+// IMPORT VALIDATION MIDDLEWARES
+
+
 import uniqid from "uniqid";
 
 // ASIGN ID TO JSON ENTRY
@@ -37,7 +41,10 @@ router.get("/", async (req, res, next) => {
 
 // CREATE AUTHOR
 
-router.post("/", async (req, res, next) => {
+router.post("/",
+userValidationRules(), 
+  validate, 
+   async (req, res, next) => {
   try {
     const { name, surname, email, dateOfBirth, } = req.body;
 
@@ -184,7 +191,7 @@ router.put("/:id", async (req, res, next) => {
 
     fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
 
-    res.send(changedAuthornode);
+    res.send(changedAuthor);
     
   } catch (error) {
 

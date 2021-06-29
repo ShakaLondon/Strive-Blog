@@ -1,29 +1,33 @@
 import express from "express";
 
 import fs from "fs";
-// USE FS TO DELETE THE FILE
+// USE FS TO DELETE THE FILE OR WRITE TO FILE
 
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 // USE TO LOCATE FILE
 
 import uniqid from "uniqid";
-
 // ASIGN ID TO JSON ENTRY
 
-// GET ALL AUTHORS
+import { userValidationRules, validate } from "./validation.js"
+// import { validationResult } from "express-validator";
+// BLOG POST VALIDATION CHAIN CHECKS ENTRY TYPE
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-// DIRECT TO FILE PATH
+// DIRECTORY TO FILE PATH
 
 const blogsFilePath = path.join(__dirname, "blog-posts.json");
+// JOIN URL PATH TO DIRECTORY FILE
+
 const router = express.Router();
+// USE EXPRESS ROUTER
 
 // CAPITAL LETTER FOR ROUTER!!
 
 
-
+// GET BLOG ALL POSTS
 router.get("/", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
@@ -35,127 +39,98 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// CREATE AUTHOR
-
-router.post("/", async (req, res, next) => {
+// CREATE NEW BLOG POST
+router.post(
+  "/", 
+  userValidationRules(), 
+  validate, 
+  async (req, res, next) => {
   try {
-    // const { category, title, cover, nameAuth, content, value, unit, authID } = req.body;
 
-    const blogInfo = {
+    const { category, title, cover, nameAuth, content, value, unit, authID, avatar } = req.body;
+    // ASSIGN ENTRY VALUES TO REQ.BODY
+
+     const blogInfo = {
       id: uniqid(),
-      category,
-      title,
-      cover,
-      readTime: {
-          value,
-          unit,
-      },
-      author: {
-          nameAuth,
-          avatar,
-          authID,
-      },
-      content,
+      // ASSIGN UNIQUE ID TO POST
+      ...req.body,
       createdAt: new Date(),
       updatedAt: new Date(),
+      // ASSIGN DATES TO POST
     };
 
-    //  const blogInfo = {
-    //   id: uniqid(),
-    //   ...req.body,
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // };
-
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
+    //  READ JSON FILE
 
     const fileAsString = fileAsBuffer.toString();
+    // CHANGE JSON TO STRING
 
     const fileAsJSONArray = JSON.parse(fileAsString);
+    // CREATE ARRAY FROM ENTRIES
 
     fileAsJSONArray.push(blogInfo);
+    // PUSH NEW ENTRY TO ARRAY
 
     fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
+    // WRITE ARRAY BACK TO FILE DIRECTORY AS STRING
     
     res.send(blogInfo);
 
-    // to delete entry
     
   } catch (error) {
-    res.send(500).send({ message: error.message });
+    res.send(500).send( validate );
   }
 });
 
-// {
-//     "_id": "SERVER GENERATED ID",
-//     "category": "ARTICLE CATEGORY",
-//     "title": "ARTICLE TITLE",
-//     "cover":"ARTICLE COVER (IMAGE LINK)",
-//     "readTime": {
-//       "value": 2,
-//       "unit": "minute"
-//     },
-//     "author": {
-//       "name": "AUTHOR AVATAR NAME",
-//       "avatar":"AUTHOR AVATAR LINK"
-//     },
-//     "content": "HTML",
-//     "createdAt": "NEW DATE"
-//   }
-
-// GET ONE AUTHOR
-
+// GET SPECIFIC BLOG POST
 router.get("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
-    // read json file
+    
     const fileAsString = fileAsBuffer.toString();
-    // convert JSON to string
+    
     const fileAsJSONArray = JSON.parse(fileAsString);
-    // read as an array
 
-    const author = fileAsJSONArray.find(author => author.id=== req.params.id)
+    const blogEntry = fileAsJSONArray.find(blog => blog.id=== req.params.id)
+    //  FILTER ARRAY TO FIND ENTRY MATCHING PARAM ID
 
-    if (!author){
+    if (!blogEntry){
         res
         .status(404)
         .send({message: `Author with ${req.params.id} is not found!`});
     }
+    // IF ENTRY IS NOT FOUND THEN RETURN ERROR
 
-    res.send(author)
+    res.send(blogEntry)
     
   } catch (error) {
     res.send(500).send({ message: error.message });
   }
 });
 
-// DELETE AUTHOR
-
+// DELETE BLOG POST
 router.delete("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
-    // read json file
+    
     const fileAsString = fileAsBuffer.toString();
-    // convert JSON to string
+    
     let fileAsJSONArray = JSON.parse(fileAsString);
-    // read as an array
+    
 
-    const author = fileAsJSONArray.find(author => author.id=== req.params.id);
+    const blogEnt = fileAsJSONArray.find(blog => blog.id=== req.params.id);
 
-    // get result then if error say not found
-
-    if (!author){
+    if (!blogEnt){
         res
         .status(404)
         .send({message: `Author with ${req.params.id} is not found!`});
     };
 
-    // to delete entry
-
-    fileAsJSONArray = fileAsJSONArray.filter((author) => author.id !== req.params.id);
-    //  return all entries except the one being deleted
+    fileAsJSONArray = fileAsJSONArray.filter((blog) => blog.id !== req.params.id);
+    //  RETURN ALL ENTRIES EXCEPT THE ONE THAT HAS BEEN DELETED
 
     fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
+    // WRITE NEW ARRAY BACK TO FILE
 
     res.status(204).send();
     
@@ -164,38 +139,40 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-// GET UPDATE AUTHOR
-
+// UPDATE BLOG POST
 router.put("/:id", async (req, res, next) => {
   try {
+
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
-    // read json file
+    
     const fileAsString = fileAsBuffer.toString();
-    // convert JSON to string
+    
     let fileAsJSONArray = JSON.parse(fileAsString);
-    // read as an array
+    
 
-    const authorIndex = fileAsJSONArray.findIndex(author => author.id=== req.params.id);
+    const blogIndex = fileAsJSONArray.findIndex(blog => blog.id=== req.params.id);
 
-    // get index of result to replace it
-
-    if (!authorIndex == -1){
+    if (!blogIndex == -1){
+// IF BLOG INDEX IS NOT FOUND
         res
         .status(404)
         .send({message: `Author with ${req.params.id} is not found!`});
+
     };
 
-    // to delete entry
+    const previousBlogData = fileAsJSONArray[blogIndex] 
+    // PREVIOUS DATA FOR SPECIFIC ID
 
-    const previousAuthorData = fileAsJSONArray[authorIndex]
+    const changedBlogs= { ...previousBlogData, ...req.body, updatedAt: new Date(), id: req.params.id}
+// NEW DATA OLD DATA NEW TIME AND SAME ID FROM PARAM
 
-    const changedAuthor = { ...previousAuthorData, ...req.body, updatedAt: new Date(), id: req.params.id}
-
-    fileAsJSONArray[authorIndex] = changedAuthor
+    fileAsJSONArray[blogIndex] = changedBlogs
+    // REPLACE INDEX WITH NEW DATA
 
     fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
+    // WRITE BACK TO JSON FILE
 
-    res.send(changedAuthornode);
+    res.send(changedBlogs);
     
   } catch (error) {
 
@@ -203,9 +180,5 @@ router.put("/:id", async (req, res, next) => {
 
   }
 });
-
-// router.get('/*', (req, res) => {                       
-//     res.sendFile(path.resolve(__dirname, '.../client/public/index.html',));                               
-//   });
 
 export default router;
