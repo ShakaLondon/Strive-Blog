@@ -23,6 +23,7 @@ export const userValidationRules = () => {
   ]
 }
 
+
 export const validate = (req, res, next) => {
     // ASSIGN VARIABLE TO VALIDATION RESULT OF REQUEST 
   const errors = validationResult(req)

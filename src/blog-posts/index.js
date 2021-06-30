@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 import uniqid from "uniqid";
 // ASIGN ID TO JSON ENTRY
 
-import { userValidationRules, validate } from "./validation.js"
+import { userValidationRules, searchValidationRules, validate } from "./validation.js"
 // import { validationResult } from "express-validator";
 // BLOG POST VALIDATION CHAIN CHECKS ENTRY TYPE
 
@@ -34,6 +34,33 @@ router.get("/", async (req, res, next) => {
     const fileAsString = fileAsBuffer.toString();
     const fileAsJSON = JSON.parse(fileAsString);
     res.send(fileAsJSON);
+  } catch (error) {
+    res.send(500).send({ message: error.message });
+  }
+});
+
+// SEARCH BLOG POSTS
+router.get("/search/:searchQuery", 
+searchValidationRules(),
+validate,
+async (req, res, next) => {
+  try {
+    // const { query } = req.query
+    // query = title =something
+    const searchQ = req.params.searchQuery
+
+    console.log(searchQ)
+
+    const searchQuery = searchQ.replace(/_/g, ' ')
+
+    const fileAsBuffer = fs.readFileSync(blogsFilePath);
+    const fileAsString = fileAsBuffer.toString();
+    const fileAsJSONArray = JSON.parse(fileAsString);
+
+    // filter results based on query
+    const filteredResults = fileAsJSONArray.filter((blogs) => 
+        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) || blog.category.toLowerCase().includes(searchQuery.toLowerCase()) || blog.nameAuth.toLowerCase().includes(searchQuery.toLowerCase()))
+    res.send(filteredResults);
   } catch (error) {
     res.send(500).send({ message: error.message });
   }
