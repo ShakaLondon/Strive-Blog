@@ -40,31 +40,39 @@ router.get("/", async (req, res, next) => {
 });
 
 // SEARCH BLOG POSTS
-router.get("/search/:searchQuery", 
+router.get("/search", 
 searchValidationRules(),
 validate,
 async (req, res, next) => {
   try {
     // const { query } = req.query
     // query = title =something
-    const searchQ = req.params.searchQuery
+    const searchInput  = req.query.searchQuery
+    // const string = searchQuery.toString()
+
+    console.log(searchInput)
+
+    const searchQ = searchInput.replace(/_/g, ' ')
 
     console.log(searchQ)
-
-    const searchQuery = searchQ.replace(/_/g, ' ')
 
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
     const fileAsString = fileAsBuffer.toString();
     const fileAsJSONArray = JSON.parse(fileAsString);
 
-    // filter results based on query
-    const filteredResults = fileAsJSONArray.filter((blogs) => 
-        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) || blog.category.toLowerCase().includes(searchQuery.toLowerCase()) || blog.nameAuth.toLowerCase().includes(searchQuery.toLowerCase()))
+    
+    const filteredResults = fileAsJSONArray.filter( (blog) => 
+        blog.title.toLowerCase().includes(searchQ.toLowerCase()) || blog.category.toLowerCase().includes(searchQ.toLowerCase()) || blog.author.nameAuth.toLowerCase().includes(searchQ.toLowerCase()))
+
+        console.log(filteredResults)
+
     res.send(filteredResults);
+
   } catch (error) {
     res.send(500).send({ message: error.message });
   }
 });
+
 
 // CREATE NEW BLOG POST
 router.post(
@@ -124,7 +132,7 @@ router.get("/:id", async (req, res, next) => {
     if (!blogEntry){
         res
         .status(404)
-        .send({message: `Author with ${req.params.id} is not found!`});
+        .send({message: `Blog with ${req.params.id} is not found!`});
     }
     // IF ENTRY IS NOT FOUND THEN RETURN ERROR
 
@@ -150,7 +158,7 @@ router.delete("/:id", async (req, res, next) => {
     if (!blogEnt){
         res
         .status(404)
-        .send({message: `Author with ${req.params.id} is not found!`});
+        .send({message: `Blog with ${req.params.id} is not found!`});
     };
 
     fileAsJSONArray = fileAsJSONArray.filter((blog) => blog.id !== req.params.id);
@@ -183,7 +191,7 @@ router.put("/:id", async (req, res, next) => {
 // IF BLOG INDEX IS NOT FOUND
         res
         .status(404)
-        .send({message: `Author with ${req.params.id} is not found!`});
+        .send({message: `Blog with ${req.params.id} is not found!`});
 
     };
 

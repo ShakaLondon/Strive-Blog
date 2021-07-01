@@ -22,6 +22,8 @@ const __dirname = dirname(__filename);
 // DIRECT TO FILE PATH
 
 const authorsFilePath = path.join(__dirname, "authors.json");
+const blogsFilePath = path.join(__dirname, "blog-posts.json");
+
 const router = express.Router();
 
 // CAPITAL LETTER FOR ROUTER!!
@@ -120,6 +122,54 @@ router.get("/:id", async (req, res, next) => {
 
     res.send(author)
     
+  } catch (error) {
+    res.send(500).send({ message: error.message });
+  }
+});
+
+// SEARCH BLOG POSTS
+router.get("/:id/blogs", 
+searchValidationRules(),
+validate,
+async (req, res, next) => {
+  try {
+
+    const fileAsBuffer = fs.readFileSync(authorsFilePath);
+    // read json file
+    const fileAsString = fileAsBuffer.toString();
+    // convert JSON to string
+    const fileAsJSONArray = JSON.parse(fileAsString);
+    // read as an array
+
+    const author = fileAsJSONArray.find(author => author.id=== req.params.id)
+
+    if (!author){
+        res
+        .status(404)
+        .send({message: `Author with ${req.params.id} is not found!`});
+    }
+
+    // res.send(author)
+
+
+
+    const blogfileAsBuffer = fs.readFileSync(blogsFilePath);
+    
+    const blogfileAsString = blogfileAsBuffer.toString();
+    
+    const blogfileAsJSONArray = JSON.parse(blogfileAsString);
+
+    const matchingBlogEntry = blogfileAsJSONArray.filter(blog => blog.author.authID === req.params.id)
+    //  FILTER ARRAY TO FIND ENTRY MATCHING PARAM ID
+
+    if (!matchingBlogEntry){
+        res
+        .status(404)
+        .send({message: `Author with ${req.params.id} is not found!`});
+    }
+
+    res.send(author, matchingBlogEntry);
+
   } catch (error) {
     res.send(500).send({ message: error.message });
   }

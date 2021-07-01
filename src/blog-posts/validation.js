@@ -1,7 +1,7 @@
 // import { checkSchema, validationResult } from "express-validator"
 
 
-import { body, param, validationResult } from 'express-validator'
+import { body, param, query, validationResult } from 'express-validator'
 
 
 export const userValidationRules = () => {
@@ -26,7 +26,7 @@ export const searchValidationRules = () => {
   return [
   //  CHECKS BODY REQUEST TO SEE IF IT FITS THE CORRECT STRUCTURE
   
-  param("searchQuery").exists().withMessage("There is nothing to search!"),
+  query("searchQuery").exists().withMessage("There is nothing to search!"),
   
   ]
   }
