@@ -23,6 +23,15 @@ export const userValidationRules = () => {
   ]
 }
 
+// export const searchValidationRules = () => {
+
+//   return [
+//   //  CHECKS BODY REQUEST TO SEE IF IT FITS THE CORRECT STRUCTURE
+  
+//   query("searchQuery").exists().withMessage("There is nothing to search!"),
+  
+//   ]
+//   }
 
 export const validate = (req, res, next) => {
     // ASSIGN VARIABLE TO VALIDATION RESULT OF REQUEST 

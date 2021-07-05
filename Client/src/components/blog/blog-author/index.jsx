@@ -3,7 +3,7 @@ import { Row, Col, Image } from "react-bootstrap";
 import "./styles.css";
 export default class BlogAuthor extends Component {
   render() {
-    const { name, avatar } = this.props;
+    const { nameAuth, avatar, authID } = this.props;
     return (
       <Row>
         <Col xs={2}>
@@ -11,7 +11,7 @@ export default class BlogAuthor extends Component {
         </Col>
         <Col>
           <div>by</div>
-          <h6>{name}</h6>
+          <h6>{nameAuth}</h6>
         </Col>
       </Row>
     );

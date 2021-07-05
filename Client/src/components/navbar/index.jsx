@@ -78,7 +78,7 @@ handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
           </Button>
           </div>
         </Container>
-        <Container className="flex-row">
+        <Container className="flex-row mt-2">
         <SearchBar showSearch={this.state.showSearch} handleBoxToggle={this.handleBoxToggle}></SearchBar>
         </Container>
       </Navbar>

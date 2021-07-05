@@ -24,13 +24,13 @@ const __dirname = dirname(__filename);
 const authorsFilePath = path.join(__dirname, "authors.json");
 const blogsFilePath = path.join(__dirname, "blog-posts.json");
 
-const router = express.Router();
+const authorrouter = express.Router({ mergeParams: true });
 
 // CAPITAL LETTER FOR ROUTER!!
 
 
 
-router.get("/", async (req, res, next) => {
+authorrouter.get("/", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
     const fileAsString = fileAsBuffer.toString();
@@ -43,7 +43,7 @@ router.get("/", async (req, res, next) => {
 
 // CREATE AUTHOR
 
-router.post("/",
+authorrouter.post("/",
 userValidationRules(), 
   validate, 
    async (req, res, next) => {
@@ -103,7 +103,7 @@ userValidationRules(),
 
 // GET ONE AUTHOR
 
-router.get("/:id", async (req, res, next) => {
+authorrouter.get("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
     // read json file
@@ -127,57 +127,85 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-// SEARCH BLOG POSTS
-router.get("/:id/blogs", 
-searchValidationRules(),
-validate,
+// SEARCH BLOG POSTS BY AUTHOR
+authorrouter.get("/:id/blogs", 
+// async (req, res, next) => {
+//   try {
+
+//     const fileAsBuffer = fs.readFileSync(authorsFilePath);
+//     // read json file
+//     const fileAsString = fileAsBuffer.toString();
+//     // convert JSON to string
+//     const fileAsJSONArray = JSON.parse(fileAsString);
+//     // read as an array
+
+//     const author = fileAsJSONArray.find(author => author.id === req.params.id)
+
+//     console.log(author)
+
+//     if (!author){
+//         res
+//         .status(404)
+//         .send({message: `Author with ${req.params.id} is not found!`});
+//     }
+
+//     res.send(author)
+
+
+
+    
+//   } catch (error) {
+//     res.send(500).send({ message: error.message });
+//   }
+// }, 
 async (req, res, next) => {
-  try {
+  try { 
 
-    const fileAsBuffer = fs.readFileSync(authorsFilePath);
-    // read json file
-    const fileAsString = fileAsBuffer.toString();
-    // convert JSON to string
-    const fileAsJSONArray = JSON.parse(fileAsString);
-    // read as an array
-
-    const author = fileAsJSONArray.find(author => author.id=== req.params.id)
-
-    if (!author){
-        res
-        .status(404)
-        .send({message: `Author with ${req.params.id} is not found!`});
-    }
-
-    // res.send(author)
-
-
+    console.log("this is in")
+    console.log(req.params.id)
 
     const blogfileAsBuffer = fs.readFileSync(blogsFilePath);
     
     const blogfileAsString = blogfileAsBuffer.toString();
     
-    const blogfileAsJSONArray = JSON.parse(blogfileAsString);
+    let blogfileAsJSONArray = JSON.parse(blogfileAsString);
 
-    const matchingBlogEntry = blogfileAsJSONArray.filter(blog => blog.author.authID === req.params.id)
-    //  FILTER ARRAY TO FIND ENTRY MATCHING PARAM ID
+    
 
-    if (!matchingBlogEntry){
+    const authorFound = await fileAsJSONArray.find((authors) => {
+      const authDet = ({...authors.author}); 
+      console.log(authDet)
+      authDet.authID=== req.params.id});
+
+    if (!authorFound){
         res
         .status(404)
-        .send({message: `Author with ${req.params.id} is not found!`});
+        .send({message: `No blogs found for Author: ${req.params.id}!`});
     }
 
-    res.send(author, matchingBlogEntry);
+    console.log(authorFound)
+
+const matchingBlogEntry = await blogfileAsJSONArray.filter((blog) => {
+      const authDet = ({...blog.author}); 
+      console.log(authDet)
+      authDet.authID === req.params.id})
+    //  FILTER ARRAY TO FIND ENTRY MATCHING PARAM ID
+
+    console.log(matchingBlogEntry)
+
+    res.send(matchingBlogEntry);
 
   } catch (error) {
     res.send(500).send({ message: error.message });
-  }
-});
+  }}
+
+    );
+
+
 
 // DELETE AUTHOR
 
-router.delete("/:id", async (req, res, next) => {
+authorrouter.delete("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
     // read json file
@@ -212,7 +240,7 @@ router.delete("/:id", async (req, res, next) => {
 
 // GET UPDATE AUTHOR
 
-router.put("/:id", async (req, res, next) => {
+authorrouter.put("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
     // read json file
@@ -254,4 +282,4 @@ router.put("/:id", async (req, res, next) => {
 //     res.sendFile(path.resolve(__dirname, '.../client/public/index.html',));                               
 //   });
 
-export default router;
+export default authorrouter;

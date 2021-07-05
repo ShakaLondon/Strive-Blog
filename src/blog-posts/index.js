@@ -21,14 +21,14 @@ const __dirname = dirname(__filename);
 const blogsFilePath = path.join(__dirname, "blog-posts.json");
 // JOIN URL PATH TO DIRECTORY FILE
 
-const router = express.Router();
+const blogrouter = express.Router({ mergeParams: true });
 // USE EXPRESS ROUTER
 
 // CAPITAL LETTER FOR ROUTER!!
 
 
 // GET BLOG ALL POSTS
-router.get("/", async (req, res, next) => {
+blogrouter.get("/", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
     const fileAsString = fileAsBuffer.toString();
@@ -40,7 +40,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // SEARCH BLOG POSTS
-router.get("/search", 
+blogrouter.get("/search", 
 searchValidationRules(),
 validate,
 async (req, res, next) => {
@@ -75,20 +75,29 @@ async (req, res, next) => {
 
 
 // CREATE NEW BLOG POST
-router.post(
+blogrouter.post(
   "/", 
   userValidationRules(), 
   validate, 
   async (req, res, next) => {
   try {
 
-    const { category, title, cover, nameAuth, content, value, unit, authID, avatar } = req.body;
+    const { category, title, cover, nameAuth, content, value, unit, authID, avatar, words } = req.body;
     // ASSIGN ENTRY VALUES TO REQ.BODY
 
      const blogInfo = {
       id: uniqid(),
       // ASSIGN UNIQUE ID TO POST
-      ...req.body,
+      category, 
+      title, 
+      cover, 
+      nameAuth, 
+      content, 
+      value, 
+      unit, 
+      authID, 
+      avatar, 
+      words,
       createdAt: new Date(),
       updatedAt: new Date(),
       // ASSIGN DATES TO POST
@@ -118,7 +127,7 @@ router.post(
 });
 
 // GET SPECIFIC BLOG POST
-router.get("/:id", async (req, res, next) => {
+blogrouter.get("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
     
@@ -144,7 +153,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // DELETE BLOG POST
-router.delete("/:id", async (req, res, next) => {
+blogrouter.delete("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
     
@@ -175,7 +184,7 @@ router.delete("/:id", async (req, res, next) => {
 });
 
 // UPDATE BLOG POST
-router.put("/:id", async (req, res, next) => {
+blogrouter.put("/:id", async (req, res, next) => {
   try {
 
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
@@ -216,4 +225,4 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-export default router;
+export default blogrouter;
