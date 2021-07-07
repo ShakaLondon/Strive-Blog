@@ -21,14 +21,14 @@ const __dirname = dirname(__filename);
 const blogsFilePath = path.join(__dirname, "blog-posts.json");
 // JOIN URL PATH TO DIRECTORY FILE
 
-const blogrouter = express.Router({ mergeParams: true });
+const blogsRouter = express.Router();
 // USE EXPRESS ROUTER
 
 // CAPITAL LETTER FOR ROUTER!!
 
 
 // GET BLOG ALL POSTS
-blogrouter.get("/", async (req, res, next) => {
+blogsRouter.get("/", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
     const fileAsString = fileAsBuffer.toString();
@@ -40,7 +40,7 @@ blogrouter.get("/", async (req, res, next) => {
 });
 
 // SEARCH BLOG POSTS
-blogrouter.get("/search", 
+blogsRouter.get("/search", 
 searchValidationRules(),
 validate,
 async (req, res, next) => {
@@ -75,7 +75,7 @@ async (req, res, next) => {
 
 
 // CREATE NEW BLOG POST
-blogrouter.post(
+blogsRouter.post(
   "/", 
   userValidationRules(), 
   validate, 
@@ -127,25 +127,34 @@ blogrouter.post(
 });
 
 // GET SPECIFIC BLOG POST
-blogrouter.get("/:id", async (req, res, next) => {
+blogsRouter.get("/:blogid", async (req, res, next) => {
   try {
+
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
     
     const fileAsString = fileAsBuffer.toString();
     
     const fileAsJSONArray = JSON.parse(fileAsString);
 
-    const blogEntry = fileAsJSONArray.find(blog => blog.id=== req.params.id)
-    //  FILTER ARRAY TO FIND ENTRY MATCHING PARAM ID
 
-    if (!blogEntry){
+    const blogEnt = fileAsJSONArray.find(blog => blog.id=== req.params.blogid)
+
+    
+
+
+    // let albumID = req.params.id
+    // let blogID = req.params.blogid
+
+    if (!blogEnt){
         res
         .status(404)
-        .send({message: `Blog with ${req.params.id} is not found!`});
+        .send({message: `Blog with ${blogEnt} is not found!`});
     }
+
+    
     // IF ENTRY IS NOT FOUND THEN RETURN ERROR
 
-    res.send(blogEntry)
+    res.send(blogEnt)
     
   } catch (error) {
     res.send(500).send({ message: error.message });
@@ -153,7 +162,7 @@ blogrouter.get("/:id", async (req, res, next) => {
 });
 
 // DELETE BLOG POST
-blogrouter.delete("/:id", async (req, res, next) => {
+blogsRouter.delete("/:blogid", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
     
@@ -162,15 +171,15 @@ blogrouter.delete("/:id", async (req, res, next) => {
     let fileAsJSONArray = JSON.parse(fileAsString);
     
 
-    const blogEnt = fileAsJSONArray.find(blog => blog.id=== req.params.id);
+    const blogEnt = fileAsJSONArray.find(blog => blog.id=== req.params.blogid);
 
     if (!blogEnt){
         res
         .status(404)
-        .send({message: `Blog with ${req.params.id} is not found!`});
+        .send({message: `Blog with ${req.params.blogid} is not found!`});
     };
 
-    fileAsJSONArray = fileAsJSONArray.filter((blog) => blog.id !== req.params.id);
+    fileAsJSONArray = fileAsJSONArray.filter((blog) => blog.id !== req.params.blogid);
     //  RETURN ALL ENTRIES EXCEPT THE ONE THAT HAS BEEN DELETED
 
     fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
@@ -184,7 +193,7 @@ blogrouter.delete("/:id", async (req, res, next) => {
 });
 
 // UPDATE BLOG POST
-blogrouter.put("/:id", async (req, res, next) => {
+blogsRouter.put("/:blogid", async (req, res, next) => {
   try {
 
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
@@ -194,20 +203,20 @@ blogrouter.put("/:id", async (req, res, next) => {
     let fileAsJSONArray = JSON.parse(fileAsString);
     
 
-    const blogIndex = fileAsJSONArray.findIndex(blog => blog.id=== req.params.id);
+    const blogIndex = fileAsJSONArray.findIndex(blog => blog.id=== req.params.blogid);
 
     if (!blogIndex == -1){
 // IF BLOG INDEX IS NOT FOUND
         res
         .status(404)
-        .send({message: `Blog with ${req.params.id} is not found!`});
+        .send({message: `Blog with ${req.params.blogid} is not found!`});
 
     };
 
     const previousBlogData = fileAsJSONArray[blogIndex] 
     // PREVIOUS DATA FOR SPECIFIC ID
 
-    const changedBlogs= { ...previousBlogData, ...req.body, updatedAt: new Date(), id: req.params.id}
+    const changedBlogs= { ...previousBlogData, ...req.body, updatedAt: new Date(), id: req.params.blogid}
 // NEW DATA OLD DATA NEW TIME AND SAME ID FROM PARAM
 
     fileAsJSONArray[blogIndex] = changedBlogs
@@ -225,4 +234,4 @@ blogrouter.put("/:id", async (req, res, next) => {
   }
 });
 
-export default blogrouter;
+export default blogsRouter;

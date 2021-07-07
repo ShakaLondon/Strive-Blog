@@ -12,6 +12,7 @@ import listEndpoints from "express-list-endpoints";
 
 import authorsRouter from "./authors/index.js"
 import blogsRouter from "./blog-posts/index.js"
+// import authorByBlogs from "./blog-posts/index-author.js"
 // TELL THE SERVER ABOUT THE ROUTES
 
 // MIDDLEWARE ERROR HANDLERS
@@ -25,6 +26,7 @@ server.use(express.json());
 
 server.use("/authors", authorsRouter);
 server.use("/blogs", blogsRouter);
+// server.use("/authors/:id/blogs", authorByBlogs),
 
 // TELL SERVER YOU WANT TO USE THIS
 

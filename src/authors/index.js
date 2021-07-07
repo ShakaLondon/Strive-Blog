@@ -5,6 +5,7 @@ import fs from "fs";
 
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+
 // USE TO LOCATE FILE
 
 import { userValidationRules, validate } from "./validation.js"
@@ -14,6 +15,7 @@ import { userValidationRules, validate } from "./validation.js"
 import uniqid from "uniqid";
 
 // ASIGN ID TO JSON ENTRY
+//import blogsRouter from "./blog-posts/index.js"
 
 // GET ALL AUTHORS
 
@@ -22,15 +24,20 @@ const __dirname = dirname(__filename);
 // DIRECT TO FILE PATH
 
 const authorsFilePath = path.join(__dirname, "authors.json");
-const blogsFilePath = path.join(__dirname, "blog-posts.json");
+const blogsFilePath = path.join(__dirname, "../blog-posts/blog-posts.json")
 
-const authorrouter = express.Router({ mergeParams: true });
+const authorsRouter = express.Router();
+// const blogsRouter = express.Router({mergeParams: true})
+
+
+
+
 
 // CAPITAL LETTER FOR ROUTER!!
 
 
 
-authorrouter.get("/", async (req, res, next) => {
+authorsRouter.get("/", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
     const fileAsString = fileAsBuffer.toString();
@@ -43,7 +50,7 @@ authorrouter.get("/", async (req, res, next) => {
 
 // CREATE AUTHOR
 
-authorrouter.post("/",
+authorsRouter.post("/",
 userValidationRules(), 
   validate, 
    async (req, res, next) => {
@@ -102,8 +109,60 @@ userValidationRules(),
 });
 
 // GET ONE AUTHOR
+authorsRouter.get('/:id/blogs', async(req, res, next)=>{
 
-authorrouter.get("/:id", async (req, res, next) => {
+  const fileAsBuffer = fs.readFileSync(authorsFilePath);
+    // read json file
+    const fileAsString = fileAsBuffer.toString();
+    // convert JSON to string
+    const fileAsJSONArray = JSON.parse(fileAsString);
+    // read as an array
+
+    console.log("get route")
+
+    const author = fileAsJSONArray.find(author => author.id=== req.params.id)
+
+    const authorID = req.params.id
+
+    if (!author){
+        res
+        .status(404)
+        .send({message: `Author with ${req.params.id} is not found!`});
+    } else {
+
+      const fileAsBuffer = fs.readFileSync(blogsFilePath);
+    // read json file
+      const fileAsString = fileAsBuffer.toString();
+    // convert JSON to string
+      const fileAsJSONArray = JSON.parse(fileAsString);
+
+      console.log("we are here") 
+
+      const blogs = fileAsJSONArray.filter((blog) => {
+
+        const authorDet = ({...blog.author})
+        console.log(authorDet)
+
+        
+        authorDet.authID === req.params.id})
+
+        if (blogs.length !== 0) {
+
+          res.send(blogs)
+
+        } else {
+
+          res
+        .status(404)
+        .send({message: `No Blogs for Author with ID: ${req.params.id} have been found!`});
+
+        }
+
+    }
+   
+}, )
+
+authorsRouter.get("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
     // read json file
@@ -112,7 +171,13 @@ authorrouter.get("/:id", async (req, res, next) => {
     const fileAsJSONArray = JSON.parse(fileAsString);
     // read as an array
 
+    console.log("get route")
+
+    // let albumID = req.params.id
+
     const author = fileAsJSONArray.find(author => author.id=== req.params.id)
+
+    // let authorID = req.params.id
 
     if (!author){
         res
@@ -127,85 +192,91 @@ authorrouter.get("/:id", async (req, res, next) => {
   }
 });
 
+// authorsRouter.use('/:id/blogs', function(req, res, next) {
+//   req.id = req.params.id;
+//   console.log(`${req.params.id}  this route is active`)
+//   next()
+// }, blogsRouter);
+
 // SEARCH BLOG POSTS BY AUTHOR
-authorrouter.get("/:id/blogs", 
+// authorsRouter.get("/:id/blogs", 
+// // async (req, res, next) => {
+// //   try {
+
+// //     const fileAsBuffer = fs.readFileSync(authorsFilePath);
+// //     // read json file
+// //     const fileAsString = fileAsBuffer.toString();
+// //     // convert JSON to string
+// //     const fileAsJSONArray = JSON.parse(fileAsString);
+// //     // read as an array
+
+// //     const author = fileAsJSONArray.find(author => author.id === req.params.id)
+
+// //     console.log(author)
+
+// //     if (!author){
+// //         res
+// //         .status(404)
+// //         .send({message: `Author with ${req.params.id} is not found!`});
+// //     }
+
+// //     res.send(author)
+
+
+
+    
+// //   } catch (error) {
+// //     res.send(500).send({ message: error.message });
+// //   }
+// // }, 
 // async (req, res, next) => {
-//   try {
+//   try { 
 
-//     const fileAsBuffer = fs.readFileSync(authorsFilePath);
-//     // read json file
-//     const fileAsString = fileAsBuffer.toString();
-//     // convert JSON to string
-//     const fileAsJSONArray = JSON.parse(fileAsString);
-//     // read as an array
+//     console.log("this is in")
+//     console.log(req.params.id)
 
-//     const author = fileAsJSONArray.find(author => author.id === req.params.id)
+//     const blogfileAsBuffer = fs.readFileSync(blogsFilePath);
+    
+//     const blogfileAsString = blogfileAsBuffer.toString();
+    
+//     let blogfileAsJSONArray = JSON.parse(blogfileAsString);
 
-//     console.log(author)
+    
 
-//     if (!author){
+//     const authorFound = await fileAsJSONArray.find((authors) => {
+//       const authDet = ({...authors.author}); 
+//       console.log(authDet)
+//       authDet.authID=== req.params.id});
+
+//     if (!authorFound){
 //         res
 //         .status(404)
-//         .send({message: `Author with ${req.params.id} is not found!`});
+//         .send({message: `No blogs found for Author: ${req.params.id}!`});
 //     }
 
-//     res.send(author)
+//     console.log(authorFound)
 
+// const matchingBlogEntry = await blogfileAsJSONArray.filter((blog) => {
+//       const authDet = ({...blog.author}); 
+//       console.log(authDet)
+//       authDet.authID === req.params.id})
+//     //  FILTER ARRAY TO FIND ENTRY MATCHING PARAM ID
 
+//     console.log(matchingBlogEntry)
 
-    
+//     res.send(matchingBlogEntry);
+
 //   } catch (error) {
 //     res.send(500).send({ message: error.message });
-//   }
-// }, 
-async (req, res, next) => {
-  try { 
+//   }}
 
-    console.log("this is in")
-    console.log(req.params.id)
-
-    const blogfileAsBuffer = fs.readFileSync(blogsFilePath);
-    
-    const blogfileAsString = blogfileAsBuffer.toString();
-    
-    let blogfileAsJSONArray = JSON.parse(blogfileAsString);
-
-    
-
-    const authorFound = await fileAsJSONArray.find((authors) => {
-      const authDet = ({...authors.author}); 
-      console.log(authDet)
-      authDet.authID=== req.params.id});
-
-    if (!authorFound){
-        res
-        .status(404)
-        .send({message: `No blogs found for Author: ${req.params.id}!`});
-    }
-
-    console.log(authorFound)
-
-const matchingBlogEntry = await blogfileAsJSONArray.filter((blog) => {
-      const authDet = ({...blog.author}); 
-      console.log(authDet)
-      authDet.authID === req.params.id})
-    //  FILTER ARRAY TO FIND ENTRY MATCHING PARAM ID
-
-    console.log(matchingBlogEntry)
-
-    res.send(matchingBlogEntry);
-
-  } catch (error) {
-    res.send(500).send({ message: error.message });
-  }}
-
-    );
+//     );
 
 
 
 // DELETE AUTHOR
 
-authorrouter.delete("/:id", async (req, res, next) => {
+authorsRouter.delete("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
     // read json file
@@ -240,7 +311,7 @@ authorrouter.delete("/:id", async (req, res, next) => {
 
 // GET UPDATE AUTHOR
 
-authorrouter.put("/:id", async (req, res, next) => {
+authorsRouter.put("/:id", async (req, res, next) => {
   try {
     const fileAsBuffer = fs.readFileSync(authorsFilePath);
     // read json file
@@ -282,4 +353,4 @@ authorrouter.put("/:id", async (req, res, next) => {
 //     res.sendFile(path.resolve(__dirname, '.../client/public/index.html',));                               
 //   });
 
-export default authorrouter;
+export default authorsRouter;
