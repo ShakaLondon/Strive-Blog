@@ -3,7 +3,8 @@ import { Row, Col } from "react-bootstrap";
 import BlogItem from "../blog-item";
 import Loading from './Loading'
 import Error from './Error'
-export default class BlogList extends Component {
+
+export default class BlogListSearch extends Component {
 
   state = {
     blogs: [], // empty state 
