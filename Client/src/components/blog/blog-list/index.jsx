@@ -30,6 +30,8 @@ export default class BlogList extends Component {
         console.log('POSTS', newPosts)
         this.setState({
             blogs: newPosts,
+            // blogs: newPosts.blogs,
+            // change back to newPosts when using local server
             isLoading: false
         })
     } catch (error) {
@@ -40,6 +42,7 @@ export default class BlogList extends Component {
   render() {
 
     let i = 1
+    let bloglist = this.state.blogs
 
     return (
       <Row>
@@ -55,7 +58,7 @@ export default class BlogList extends Component {
 
             :
                     
-                this.state.blogs.map((post) => (
+                bloglist.map((post) => (
           <Col md={4} key={post.id} style={{ marginBottom: 50 }}>
             <BlogItem  key={i++} {...post} />
           </Col>
