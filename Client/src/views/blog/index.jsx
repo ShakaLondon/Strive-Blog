@@ -52,6 +52,30 @@ class BlogPage extends Component {
     }
 }
 
+componentDidUpdate = async (prevProps) => {
+  if (this.props.match.params !== prevProps.id) {
+    try {
+
+      const { id } = this.props.match.params;
+        
+        
+      let response = await fetch(`http://localhost:3000/blogs/${id}`)
+      console.log(response)
+      // this is happening AFTER the initial render invocation
+      let newPosts = await response.json()
+      // .json() is a method in charge of converting your response body into something usable in JS
+      console.log('POSTS', newPosts)
+      this.setState({
+          blog: newPosts,
+          isLoading: false
+      })
+  } catch (error) {
+      console.log(error)
+      this.setState({ isLoading: false, isError: true })
+  }
+  }
+}
+
   render() {
     console.log(this.state.blog)
     const readTimeVal = {...this.state.blog.readTime}

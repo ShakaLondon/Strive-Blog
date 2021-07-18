@@ -23,7 +23,7 @@ handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
 
   render() {
     return (
-      <Navbar expand="lg" className="blog-navbar" fixed="top">
+      <Navbar expand="lg" className="blog-navbar absolute">
         <Container className="justify-content-between flex-row">
           <Navbar.Brand as={Link} to="/">
             <img className="blog-navbar-brand" alt="logo" src={logo} />
@@ -80,6 +80,7 @@ handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
         </Container>
         <Container className="flex-row mt-2">
         <SearchBar showSearch={this.state.showSearch} handleBoxToggle={this.handleBoxToggle}></SearchBar>
+        {this.renderBlogs}
         </Container>
       </Navbar>
     );

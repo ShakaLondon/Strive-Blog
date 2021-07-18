@@ -1,0 +1,7 @@
+.containersearchshow {
+    display: inline-flex !important;
+  }
+  
+  .containersearch {
+    display: none !important;
+  }

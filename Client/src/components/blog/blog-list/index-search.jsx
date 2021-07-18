@@ -3,14 +3,24 @@ import { Row, Col } from "react-bootstrap";
 import BlogItem from "../blog-item";
 import Loading from './Loading'
 import Error from './Error'
+import "./styles.css";
 
 export default class BlogListSearch extends Component {
 
   state = {
     blogs: [], // empty state 
     isLoading: true,
-    isError: false
+    isError: false,
+    showSearch: false
 }
+
+constructor(props) {
+  super(props)
+
+  this.handleBoxToggle= this.handleBoxToggle.bind(this)
+}
+
+handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
 
   componentDidMount = async () => {
     // this is a reserved method, a lifecycle one
@@ -20,45 +30,49 @@ export default class BlogListSearch extends Component {
     console.log('COMPONENTDIDMOUNT')
     // componentDidMount is the PERFECT PLACE for our fetch
     // so here we're going to put our fetch()
-    try {
+    // try {
         
         
-        let response = await fetch('http://localhost:3000/blogs')
-        console.log(response)
-        // this is happening AFTER the initial render invocation
-        let newPosts = await response.json()
-        // .json() is a method in charge of converting your response body into something usable in JS
-        console.log('POSTS', newPosts)
-        this.setState({
-            blogs: newPosts,
-            isLoading: false
-        })
-    } catch (error) {
-        console.log(error)
-        this.setState({ isLoading: false, isError: true })
-    }
+    //     let response = await fetch('http://localhost:3000/blogs')
+    //     console.log(response)
+    //     // this is happening AFTER the initial render invocation
+    //     let newPosts = await response.json()
+    //     // .json() is a method in charge of converting your response body into something usable in JS
+    //     console.log('POSTS', newPosts)
+    //     this.setState({
+    //         blogs: newPosts,
+    //         isLoading: false
+    //     })
+    // } catch (error) {
+    //     console.log(error)
+    //     this.setState({ isLoading: false, isError: true })
+    // }
+    this.setState({
+      isLoading: false
+  })
 }
+
   render() {
 
     let i = 1
 
     return (
-      <Row>
+      <Row className={`containersearch${this.props.showSearch ? "show" : ""}`}>
         {this.state.isLoading && <Loading />}
         {this.state.isError && <Error />}
         {(
           
               this.state.blogs.length === 0
-              && this.state.isLoading === false
-              && this.state.isError === false
+              && this.props.isLoading === false
+              && this.props.isError === false
 
           ) ? <p>NO POSTS TO SHOW</p>
 
             :
                     
-                this.state.blogs.map((post) => (
+                this.props.blogs.map((post) => (
           <Col md={4} key={post.id} style={{ marginBottom: 50 }}>
-            <BlogItem  key={i++} {...post} />
+            <BlogItem  key={i++} {...post} onClick={this.handleBoxToggle}/>
           </Col>
         ))}
       </Row>

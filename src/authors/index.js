@@ -349,6 +349,36 @@ authorsRouter.put("/:id", async (req, res, next) => {
   }
 });
 
+authorsRouter.get("/:id/blogs", async (req, res, next) => {
+  try {
+    const fileAsBuffer = fs.readFileSync(blogsFilePath);
+    // read json file
+    const fileAsString = fileAsBuffer.toString();
+    // convert JSON to string
+    const fileAsJSONArray = JSON.parse(fileAsString);
+    // read as an array
+
+    console.log("get route")
+
+    // let albumID = req.params.id
+
+    const blogs = fileAsJSONArray.find(blogs => blogs.author.authID === req.params.id)
+
+    // let authorID = req.params.id
+
+    if (!blogs){
+        res
+        .status(404)
+        .send({message: `Blogs for Author with ${req.params.id} is not found!`});
+    }
+
+    res.send(author)
+    
+  } catch (error) {
+    res.send(500).send({ message: error.message });
+  }
+});
+
 // router.get('/*', (req, res) => {                       
 //     res.sendFile(path.resolve(__dirname, '.../client/public/index.html',));                               
 //   });
