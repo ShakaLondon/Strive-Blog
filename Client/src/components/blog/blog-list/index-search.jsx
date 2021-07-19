@@ -57,7 +57,7 @@ handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
     let i = 1
 
     return (
-      <Row className={`containersearch${this.props.showSearch ? "show" : ""}`}>
+      <Row>
         {this.state.isLoading && <Loading />}
         {this.state.isError && <Error />}
         {(
@@ -72,7 +72,7 @@ handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
                     
                 this.props.blogs.map((post) => (
           <Col md={4} key={post.id} style={{ marginBottom: 50 }}>
-            <BlogItem  key={i++} {...post} onClick={this.handleBoxToggle}/>
+            <BlogItem  key={i++} {...post}/>
           </Col>
         ))}
       </Row>

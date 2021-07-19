@@ -80,7 +80,7 @@ handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
         </Container>
         <Container className="flex-row mt-2">
         <SearchBar showSearch={this.state.showSearch} handleBoxToggle={this.handleBoxToggle}></SearchBar>
-        {this.renderBlogs}
+        {/* {this.renderBlogs} */}
         </Container>
       </Navbar>
     );

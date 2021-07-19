@@ -14,6 +14,14 @@ export default class BlogItem extends Component {
     content: "",
   }
 
+  constructor(props) {
+    super(props)
+  
+    this.handleBoxToggle= this.handleBoxToggle.bind(this)
+  }
+  
+  handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
+
 
   render() {
     const { title, category, cover, author, id, content, } = this.props;

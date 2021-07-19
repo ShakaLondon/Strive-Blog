@@ -53,7 +53,7 @@ onChangeHandler = async (e) => {
 get renderBlogs() {
   let blogs
   if (this.state.blogs){
-  blogs = <BlogListSearch blogs={this.state.blogs} showSearch={this.props.showSearch} handleBoxToggle={this.handleBoxToggle}/>;
+  blogs = <BlogListSearch blogs={this.state.blogs} showSearch={this.state.showSearch} />;
   console.log(this.state.blogs)
   } else if (this.state.query) {
     blogs = <h1 class="pt-3">There's no blogs to show</h1>;
