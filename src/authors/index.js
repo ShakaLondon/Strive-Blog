@@ -5,11 +5,17 @@ import fs from "fs";
 
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import multer from "multer"
+import createError from "http-errors"
+import { parseFile, userUploadFile } from "../utils/upload/index.js";
+
 
 // USE TO LOCATE FILE
 
 import { userValidationRules, validate } from "./validation.js"
 // IMPORT VALIDATION MIDDLEWARES
+
+import { writeAuthorsPicture } from "../lib/fs-tools.js"
 
 
 import uniqid from "uniqid";
@@ -378,6 +384,42 @@ authorsRouter.get("/:id/blogs", async (req, res, next) => {
     res.send(500).send({ message: error.message });
   }
 });
+
+authorsRouter.put("/:id/avatar", 
+parseFile.single("avatar"),
+userUploadFile,
+  async (req, res, next) => {
+    try {
+      const fileAsBuffer = fs.readFileSync(authorsFilePath);
+
+      const fileAsString = fileAsBuffer.toString();
+
+      let fileAsJSONArray = JSON.parse(fileAsString);
+
+      const authorIndex = fileAsJSONArray.findIndex(
+        (author) => author.id === req.params.id
+      );
+      if (!authorIndex == -1) {
+        res
+          .status(404)
+          .send({ message: `Author with ${req.params.id} is not found!` });
+      }
+      const previousAuthorData = fileAsJSONArray[authorIndex];
+      const changedAuthor = {
+        ...previousAuthorData,
+        avatar: req.file,
+        updatedAt: new Date(),
+        id: req.params.id,
+      };
+      fileAsJSONArray[authorIndex] = changedAuthor;
+      fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+      res.send(changedAuthor);
+    } catch (error) {
+      res.send(500).send({ message: error.message });
+    }
+  }
+);
+
 
 // router.get('/*', (req, res) => {                       
 //     res.sendFile(path.resolve(__dirname, '.../client/public/index.html',));                               

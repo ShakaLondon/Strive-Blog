@@ -6,8 +6,8 @@ const { readJSON, writeJSON, writeFile } = fs
 
 const authorsJSONPath = join(dirname(fileURLToPath(import.meta.url)), "../authors/authors.json")
 const blogsJSONPath = join(dirname(fileURLToPath(import.meta.url)), "../blog-posts/blog-posts.json")
-const authorsPublicFolderPath = join(dirname(fileURLToPath(import.meta.url)), "../../public/img/users")
-const coversPublicFolderPath = join(dirname(fileURLToPath(import.meta.url)), "../../public/img/covers")
+const authorsPublicFolderPath = join(dirname(fileURLToPath(import.meta.url)), "../../Public/Img/users") 
+const coversPublicFolderPath = join(dirname(fileURLToPath(import.meta.url)), "../../Public/Img/covers")
 
 // export const getUsers = () => readJSON(usersJSONPath)
 // export const getBooks = () => readJSON(booksJSONPath)

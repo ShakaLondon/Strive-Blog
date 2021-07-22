@@ -5,6 +5,9 @@ import { join } from "path"
 // create routes to folders
 
 import cors from "cors";
+import path, { dirname } from "path";
+
+import { fileURLToPath } from "url";
 // IMPORT CORS
 
 import listEndpoints from "express-list-endpoints";
@@ -15,27 +18,34 @@ import listEndpoints from "express-list-endpoints";
 
 import authorsRouter from "./authors/index.js"
 import blogsRouter from "./blog-posts/index.js"
-import filesRouter from "./files/index.js"
+// import filesRouter from "./files/index.js"
 // import authorByBlogs from "./blog-posts/index-author.js"
 // TELL THE SERVER ABOUT THE ROUTES
 
 // MIDDLEWARE ERROR HANDLERS
 import { catchAllErrorHandler, entryForbiddenMiddleware, notFoundMiddleware } from "./errorHandlers.js"
 
-import { getCurrentFolderPath } from "./lib/fs-tools.js"
+const __filename = fileURLToPath(import.meta.url);
 
-const publicFolderPath = join(getCurrentFolderPath(import.meta.url), "../public")
+const __dirname = dirname(__filename);
+
+// import { getCurrentFolderPath } from "../src/lib/fs-tools.js"
+
+const userPublicDirectory = path.join(__dirname, "../Client/public/img/users");
 
 const server = express();
 const PORT = 3000;
 
-server.use(cors());
 server.use(express.json());
-server.use(express.static(publicFolderPath))
+server.use(cors());
+
+server.use(express.static(userPublicDirectory))
 server.use("/authors", authorsRouter);
 server.use("/blogs", blogsRouter);
-server.use("/authors", filesRouter)
-server.use("/blogs", filesRouter)
+// server.use(bodyParser.urlencoded({ extended: false }))
+// server.use(bodyParser.json())
+// server.use("/authors", filesRouter)
+// server.use("/blogs", filesRouter)
 // server.use("/authors/:id/blogs", authorByBlogs),
 
 // TELL SERVER YOU WANT TO USE THIS
