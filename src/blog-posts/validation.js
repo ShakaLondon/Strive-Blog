@@ -16,8 +16,8 @@ export const userValidationRules = () => {
   body("author.avatar").exists().withMessage("You are not logged in!"),
   body("author.authID").exists().withMessage("You are not logged in!"),
   body("author.nameAuth").exists().withMessage("You are not logged in!"),
-  body("content").exists().withMessage("Please add some text to post."),
-  body("words").exists().withMessage("Please add some text to post.").isInt({max: 5000}).withMessage("Word value should be an integer!"),
+  body("content").exists().withMessage("Please add some text to post.").isInt({min: 1}).withMessage("Please add more Content!"),
+  body("readTime.words").exists().withMessage("Please add some text to post.").isInt({max: 5000}).withMessage("Word value should be an integer!"),
   
   ]
 }

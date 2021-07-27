@@ -12,6 +12,7 @@ export default class BlogItem extends Component {
     author: "",
     id: "",
     content: "",
+    showSearch: false
   }
 
   constructor(props) {

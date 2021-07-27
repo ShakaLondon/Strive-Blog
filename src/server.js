@@ -31,15 +31,17 @@ const __dirname = dirname(__filename);
 
 // import { getCurrentFolderPath } from "../src/lib/fs-tools.js"
 
-const userPublicDirectory = path.join(__dirname, "../Client/public/img/users");
+const publicDirectory = path.join(__dirname, "../Client");
 
 const server = express();
-const PORT = 3000;
-
 server.use(express.json());
 server.use(cors());
 
-server.use(express.static(userPublicDirectory))
+const PORT = 3000;
+
+
+
+server.use(express.static(publicDirectory))
 server.use("/authors", authorsRouter);
 server.use("/blogs", blogsRouter);
 // server.use(bodyParser.urlencoded({ extended: false }))

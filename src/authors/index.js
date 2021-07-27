@@ -15,7 +15,7 @@ import { parseFile, userUploadFile } from "../utils/upload/index.js";
 import { userValidationRules, validate } from "./validation.js"
 // IMPORT VALIDATION MIDDLEWARES
 
-import { writeAuthorsPicture } from "../lib/fs-tools.js"
+// import { writeAuthorsPicture } from "../lib/fs-tools.js"
 
 
 import uniqid from "uniqid";
@@ -33,6 +33,8 @@ const authorsFilePath = path.join(__dirname, "authors.json");
 const blogsFilePath = path.join(__dirname, "../blog-posts/blog-posts.json")
 
 const authorsRouter = express.Router();
+
+// const upload = multer({})
 // const blogsRouter = express.Router({mergeParams: true})
 
 
@@ -166,7 +168,46 @@ authorsRouter.get('/:id/blogs', async(req, res, next)=>{
 
     }
    
-}, )
+});
+
+authorsRouter.post("/:id/avatar", 
+parseFile.single("avatar"),
+userUploadFile,
+  async (req, res, next) => {
+    try {
+      console.log(req.file)
+      console.log("here")
+      
+      const fileAsBuffer = fs.readFileSync(authorsFilePath);
+
+      const fileAsString = fileAsBuffer.toString();
+
+      let fileAsJSONArray = JSON.parse(fileAsString);
+
+      const authorIndex = fileAsJSONArray.findIndex(
+        (author) => author.id === req.params.id
+      );
+      if (!authorIndex == -1) {
+        res
+          .status(404)
+          .send({ message: `Author with ${req.params.id} is not found!` });
+      }
+      const previousAuthorData = fileAsJSONArray[authorIndex];
+      const changedAuthor = {
+        ...previousAuthorData,
+        avatar: req.file,
+        updatedAt: new Date(),
+        id: req.params.id,
+      };
+      console.log(changedAuthor)
+      fileAsJSONArray[authorIndex] = changedAuthor;
+      fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+      res.status(200).send(changedAuthor);
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  }
+);
 
 authorsRouter.get("/:id", async (req, res, next) => {
   try {
@@ -385,40 +426,30 @@ authorsRouter.get("/:id/blogs", async (req, res, next) => {
   }
 });
 
-authorsRouter.put("/:id/avatar", 
-parseFile.single("avatar"),
-userUploadFile,
-  async (req, res, next) => {
-    try {
-      const fileAsBuffer = fs.readFileSync(authorsFilePath);
 
-      const fileAsString = fileAsBuffer.toString();
 
-      let fileAsJSONArray = JSON.parse(fileAsString);
+// experienceRouter.post('/:userName/experiences/:expId/picture', uploadOnCloudinary.single('image'), async (req, res,next) => {
+//   try {
+//       const expId = req.params.expId
+//       // const profile = await ProfileModel.findById(profileId)
 
-      const authorIndex = fileAsJSONArray.findIndex(
-        (author) => author.id === req.params.id
-      );
-      if (!authorIndex == -1) {
-        res
-          .status(404)
-          .send({ message: `Author with ${req.params.id} is not found!` });
-      }
-      const previousAuthorData = fileAsJSONArray[authorIndex];
-      const changedAuthor = {
-        ...previousAuthorData,
-        avatar: req.file,
-        updatedAt: new Date(),
-        id: req.params.id,
-      };
-      fileAsJSONArray[authorIndex] = changedAuthor;
-      fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
-      res.send(changedAuthor);
-    } catch (error) {
-      res.send(500).send({ message: error.message });
-    }
-  }
-);
+//       const modifiedExperience = await ExperienceModel.findByIdAndUpdate(
+//           expId, 
+//           {image: req.file.path}, 
+//           {new: true} 
+//       )
+//       if(modifiedExperience) {
+//           res.send(modifiedExperience)
+//       } else {
+//           next(createError(404, `Experience with _id ${expId} Not Found!`))
+//       }
+//   } catch (error) {
+//       console.log(error)
+//       next(createError(500, `An Error ocurred while uploading Image to experience with _id ${expId}`))
+
+//   }
+// }
+// );
 
 
 // router.get('/*', (req, res) => {                       

@@ -3,6 +3,8 @@ import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import { Container, Form, Button } from "react-bootstrap";
 import "./styles.css";
+import FilesUploadComponent from "./index-upload.jsx"
+
 export default class NewBlogPost extends Component {
 
   
@@ -13,14 +15,20 @@ export default class NewBlogPost extends Component {
     this.state = { blogPost: { 
       category: "",
       title: "",
-      cover: "",
-      nameAuth: "",
+      author: {
+        nameAuth: "",
+        authID: "",
+        avatar: "http://localhost:3000/public/img/users/default.jpeg"
+      },
       content: "",
-      readTime: 0,
-      words: 0,
-      unit: "",
-      authID: "",
-      avatar: "", }};
+      readTime: {
+        words: 0,
+        unit: "",
+        value: 0
+      },
+      cover: "http://localhost:3000/public/img/covers/default-cover.png" },
+    form: null,
+    blogID: null };
     // SET STATES FOR JSON BODY AND FORM INPUT
 
 
@@ -29,6 +37,7 @@ export default class NewBlogPost extends Component {
     this.handleCount = this.handleCount.bind(this)
     // this.handleQuillChange = this.handleQuillChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.addFile = this.addFile.bind(this)
   }
   
   // ON FORM INPUT CHANGE ASSIGN CHANGE TO STATE
@@ -75,9 +84,35 @@ export default class NewBlogPost extends Component {
 
     console.log(unitResult)
 
-    this.setState({ blogPost: { ...this.state.blogPost, content: entry, readTime: unitResult, words: stats.words, unit: "minute/s" } })
+    this.setState({ blogPost: { ...this.state.blogPost, content: entry, readTime: { value: unitResult, words: stats.words, unit: "minute/s" }} })
 
   }
+
+  // handleUpload = async (file) => { 
+
+  //   const files = e.target.files
+  //   const formData = new FormData()
+  //   formData.append('avatar', file)
+
+  //   this.setState({ form: formData})
+
+  // }
+
+  
+
+  addFile = (e) => {
+    
+    // event to update state when form inputs change
+    console.log(e.target.files)
+    const files = e.target.files
+    const fd = new FormData();
+    fd.append('cover', files[0]);
+
+    console.log(fd)
+
+    this.setState({ form: fd });
+  }
+
 
   
 
@@ -87,6 +122,7 @@ export default class NewBlogPost extends Component {
    
 
     console.log(this.state.blogPost)
+    console.log(this.state.form)
 
     try {
       let response = await fetch("http://localhost:3000/blogs", {
@@ -96,23 +132,60 @@ export default class NewBlogPost extends Component {
               'Content-type': 'application/json'
           }
       })
-      console.log(response.ok) // the ok property from the fetch() is going to tell you if the operation was successfull
+      console.log(response.ok)
+      let newBlog = await response.json()
+      console.log(newBlog)
+       // the ok property from the fetch() is going to tell you if the operation was successfull
       if (response.ok) {
 
           this.setState({
             blogPost: { 
               category: "",
               title: "",
-              cover: "",
-              nameAuth: "",
+              author: {
+                nameAuth: "",
+                authID: "",
+                avatar: "http://localhost:3000/public/img/users/default.jpeg"
+              },
               content: "",
-              readTime: 0,
-              words: 0,
-              unit: "",
-              authID: "",
-              avatar: "", }
+              readTime: {
+                words: 0,
+                unit: "",
+                value: 0
+              },
+              cover: "http://localhost:3000/public/img/covers/default-cover.png"},
+              blogID: newBlog.id
           })
           alert('Success! Your blog has been posted: ' + this.state.blogPost.title);
+      } else {
+          // this is going to catch a server problem
+          // i.e: server is down, db has a problem
+          alert('Houston we had a problem, try again!')
+      }
+  } catch (error) {
+      // if we fall here it means we don't have connection
+      // or maybe the url is not quite right
+      console.log(error)
+  } finally {
+
+
+
+  if (this.state.form !== null && this.state.blogID !== null) {
+    try {
+      let response = await fetch(`http://localhost:3000/blogs/${this.state.blogID}/cover`, {
+          method: 'POST',
+          body: this.state.form,
+          // headers: {
+          //     'Content-type': 'multipart/form-data'
+          // }
+      })
+      console.log(response.ok) // the ok property from the fetch() is going to tell you if the operation was successfull
+      if (response.ok) {
+
+          this.setState({
+            form: null,
+            blogID: null })
+          alert('Success! Your picture has been posted');
       } else {
           // this is going to catch a server problem
           // i.e: server is down, db has a problem
@@ -125,14 +198,28 @@ export default class NewBlogPost extends Component {
   }
 
     
+}}
+
+    
 }
 
 
 
   render() {
+
+    // document.querySelector('#avatar').addEventListener('change', event => {
+    //   handleUpload(event)
+    // })
+
+  // const avatarInput = document.querySelector('#avatar');
+  // avatarInputa.onchange = () => {
+  // const selectedFile = avatarInput.files[0];
+  // console.log(selectedFile);
+// }
+
     return (
       <Container className="new-blog-container">
-        <Form className="mt-5">
+        <Form>
           <Form.Group controlId="blog-form" className="mt-3">
             <Form.Label>Title</Form.Label>
             <Form.Control size="lg" placeholder="Enter the title of your blog here..." type="text" value={this.state.blogPost.title} name="title" onChange={e => this.handleChange(e)}/>
@@ -155,6 +242,7 @@ export default class NewBlogPost extends Component {
               className="new-blog-content"
             />
           </Form.Group>
+          <FilesUploadComponent addFile={this.addFile}/>
           <Form.Group className="d-flex mt-3 justify-content-end">
             <Button type="reset" size="lg" variant="outline-dark">
               Reset

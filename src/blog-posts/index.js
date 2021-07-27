@@ -11,6 +11,7 @@ import uniqid from "uniqid";
 // ASIGN ID TO JSON ENTRY
 
 import { userValidationRules, searchValidationRules, validate } from "./validation.js"
+import { parseFile, coverUploadFile } from "../utils/upload/index.js";
 // import { validationResult } from "express-validator";
 // BLOG POST VALIDATION CHAIN CHECKS ENTRY TYPE
 
@@ -82,26 +83,42 @@ blogsRouter.post(
   async (req, res, next) => {
   try {
 
-    const { category, title, cover, nameAuth, content, value, unit, authID, avatar, words } = req.body;
+    // const { category, title, cover, nameAuth, content, value, unit, authID, avatar, words } = req.body;
+    const { category, title, cover, content, author, readTime } = req.body;
     // ASSIGN ENTRY VALUES TO REQ.BODY
 
-     const blogInfo = {
+    //  const blogInfo = {
+    //   id: uniqid(),
+    //   // ASSIGN UNIQUE ID TO POST
+    //   category, 
+    //   title, 
+    //   cover, 
+    //   nameAuth, 
+    //   content, 
+    //   value, 
+    //   unit, 
+    //   authID, 
+    //   avatar, 
+    //   words,
+    //   createdAt: new Date(),
+    //   updatedAt: new Date(),
+    //   // ASSIGN DATES TO POST
+    // };
+
+    const blogInfo = {
       id: uniqid(),
       // ASSIGN UNIQUE ID TO POST
       category, 
       title, 
       cover, 
-      nameAuth, 
       content, 
-      value, 
-      unit, 
-      authID, 
-      avatar, 
-      words,
+      readTime,
+      author,
       createdAt: new Date(),
       updatedAt: new Date(),
       // ASSIGN DATES TO POST
     };
+
 
     const fileAsBuffer = fs.readFileSync(blogsFilePath);
     //  READ JSON FILE
@@ -125,6 +142,45 @@ blogsRouter.post(
     res.send(500).send( validate );
   }
 });
+
+blogsRouter.post("/:id/cover", 
+parseFile.single("cover"),
+coverUploadFile,
+  async (req, res, next) => {
+    try {
+      console.log(req.file)
+      console.log("here")
+      
+      const fileAsBuffer = fs.readFileSync(blogsFilePath);
+
+      const fileAsString = fileAsBuffer.toString();
+
+      let fileAsJSONArray = JSON.parse(fileAsString);
+
+      const blogIndex = fileAsJSONArray.findIndex(
+        (blog) => blog.id === req.params.id
+      );
+      if (!blogIndex == -1) {
+        res
+          .status(404)
+          .send({ message: `Author with ${req.params.id} is not found!` });
+      }
+      const previousBlogData = fileAsJSONArray[blogIndex];
+      const changedBlog = {
+        ...previousBlogData,
+        cover: req.file,
+        updatedAt: new Date(),
+        id: req.params.id,
+      };
+      console.log(changedBlog)
+      fileAsJSONArray[blogIndex] = changedBlog;
+      fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
+      res.status(200).send(changedBlog);
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  }
+);
 
 // GET SPECIFIC BLOG POST
 blogsRouter.get("/:blogid", async (req, res, next) => {

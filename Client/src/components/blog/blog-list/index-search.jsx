@@ -11,16 +11,19 @@ export default class BlogListSearch extends Component {
     blogs: [], // empty state 
     isLoading: true,
     isError: false,
-    showSearch: false
+    
 }
 
 constructor(props) {
   super(props)
+  this.state = {
+    showSearch: false
+  }
 
   this.handleBoxToggle= this.handleBoxToggle.bind(this)
 }
 
-handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
+handleBoxToggle = () => this.setState({ showSearch: !this.props.showSearch });
 
   componentDidMount = async () => {
     // this is a reserved method, a lifecycle one
@@ -57,12 +60,13 @@ handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
     let i = 1
 
     return (
+      
       <Row>
-        {this.state.isLoading && <Loading />}
-        {this.state.isError && <Error />}
+        {this.props.isLoading && <Loading />}
+        {this.props.isError && <Error />}
         {(
           
-              this.state.blogs.length === 0
+              this.props.blogs.length === 0
               && this.props.isLoading === false
               && this.props.isError === false
 
@@ -71,8 +75,8 @@ handleBoxToggle = () => this.setState({ showSearch: !this.state.showSearch });
             :
                     
                 this.props.blogs.map((post) => (
-          <Col md={4} key={post.id} style={{ marginBottom: 50 }}>
-            <BlogItem  key={i++} {...post}/>
+          <Col md={4} key={post.id} style={{ marginBottom: 50 }} showSearch={this.props.showSearch} >
+            <BlogItem  key={i++} {...post} onClick={this.handleBoxToggle}/>
           </Col>
         ))}
       </Row>
