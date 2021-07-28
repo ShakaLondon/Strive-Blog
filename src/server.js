@@ -41,27 +41,30 @@ const publicDirectory = path.join(__dirname, "../Client");
 
 
 const server = express();
+const PORT = process.env.PORT || 3000;
 
 // const { PORT } = process.env;
 
-// const whiteList = ["http://localhost:3000"];
+const whiteList = ["http://localhost:3001"];
 
-// const corsOptions = {
-//   origin: (origin, callback) => {
-//     if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
-//       callback(null, true);
-//     } else {
-//       const error = new Error("Not allowed by cors!");
-//       error.status = 403;
-//       callback(error);
-//     }
-//   },
-// };
+const corsOptions = {
+  origin: (origin, callback) => {
+    //   console.log({origin})
+    if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
+      callback(null, true);
+    //   if the origin is in the whitelist then loading page if not then err
+    } else {
+      const error = new Error("Not allowed by cors!");
+      error.status = 403;
+      callback(error);
+    }
+  },
+};
 
 
 
 
-const PORT = process.env.PORT || 3000;
+
 
 // const whitelist = [process.env.FRONTEND_URL, process.env.FRONTEND_PROD_URL, process.env.REACT_APP_API_URL]
 
@@ -81,7 +84,7 @@ const PORT = process.env.PORT || 3000;
 
 
 server.use(express.json());
-// server.use(cors(corsOptions));
+server.use(cors(corsOptions));
 
 
 

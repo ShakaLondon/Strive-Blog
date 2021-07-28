@@ -170,14 +170,56 @@ authorsRouter.get('/:id/blogs', async(req, res, next)=>{
    
 });
 
+// save links to local storage
+// authorsRouter.post("/:id/avatar", 
+// parseFile.single("avatar"),
+// userUploadFile,
+//   async (req, res, next) => {
+//     try {
+//       console.log(req.file)
+//       console.log("here")
+      
+//       const fileAsBuffer = fs.readFileSync(authorsFilePath);
+
+//       const fileAsString = fileAsBuffer.toString();
+
+//       let fileAsJSONArray = JSON.parse(fileAsString);
+
+//       const authorIndex = fileAsJSONArray.findIndex(
+//         (author) => author.id === req.params.id
+//       );
+//       if (!authorIndex == -1) {
+//         res
+//           .status(404)
+//           .send({ message: `Author with ${req.params.id} is not found!` });
+//       }
+//       const previousAuthorData = fileAsJSONArray[authorIndex];
+//       const changedAuthor = {
+//         ...previousAuthorData,
+//         avatar: req.file,
+//         updatedAt: new Date(),
+//         id: req.params.id,
+//       };
+//       console.log(changedAuthor)
+//       fileAsJSONArray[authorIndex] = changedAuthor;
+//       fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
+//       res.status(200).send(changedAuthor);
+//     } catch (error) {
+//       res.status(500).send({ message: error.message });
+//     }
+//   }
+// );
+
+// save data via cloudinary
 authorsRouter.post("/:id/avatar", 
 parseFile.single("avatar"),
-userUploadFile,
   async (req, res, next) => {
     try {
       console.log(req.file)
       console.log("here")
-      
+
+      // res.send(req.file)
+
       const fileAsBuffer = fs.readFileSync(authorsFilePath);
 
       const fileAsString = fileAsBuffer.toString();
@@ -195,7 +237,7 @@ userUploadFile,
       const previousAuthorData = fileAsJSONArray[authorIndex];
       const changedAuthor = {
         ...previousAuthorData,
-        avatar: req.file,
+        avatar: req.file.path,
         updatedAt: new Date(),
         id: req.params.id,
       };
@@ -203,6 +245,9 @@ userUploadFile,
       fileAsJSONArray[authorIndex] = changedAuthor;
       fs.writeFileSync(authorsFilePath, JSON.stringify(fileAsJSONArray));
       res.status(200).send(changedAuthor);
+      
+      
+
     } catch (error) {
       res.status(500).send({ message: error.message });
     }

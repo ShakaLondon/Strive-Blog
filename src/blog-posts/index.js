@@ -145,7 +145,6 @@ blogsRouter.post(
 
 blogsRouter.post("/:id/cover", 
 parseFile.single("cover"),
-coverUploadFile,
   async (req, res, next) => {
     try {
       console.log(req.file)
@@ -168,7 +167,7 @@ coverUploadFile,
       const previousBlogData = fileAsJSONArray[blogIndex];
       const changedBlog = {
         ...previousBlogData,
-        cover: req.file,
+        cover: req.file.path,
         updatedAt: new Date(),
         id: req.params.id,
       };
