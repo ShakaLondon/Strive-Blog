@@ -26,7 +26,7 @@ import blogsRouter from "./blog-posts/index.js"
 // TELL THE SERVER ABOUT THE ROUTES
 
 // MIDDLEWARE ERROR HANDLERS
-import { catchAllErrorHandler, entryForbiddenMiddleware, notFoundMiddleware } from "./errorHandlers.js"
+import { errorHandler } from "./newErrorHandlers.js"
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -45,7 +45,7 @@ const PORT = process.env.PORT || 3000;
 
 // const { PORT } = process.env;
 
-const whiteList = [process.env.FRONTEND_URL, process.env.FRONTEND_PROD_URL, process.env.REACT_APP_API_URL];
+const whiteList = [process.env.FRONTEND_URL, process.env.FRONTEND_PROD_URL, process.env.REACT_APP_API_URL, "http://localhost:3000/blogs"];
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -110,9 +110,7 @@ server.use("/blogs", blogsRouter);
 
 // TELL SERVER YOU WANT TO USE THIS
 
-server.use(notFoundMiddleware)
-server.use(entryForbiddenMiddleware)
-server.use(catchAllErrorHandler)
+server.use(errorHandler)
 
 // MIDDLEWARES
 
