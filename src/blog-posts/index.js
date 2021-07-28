@@ -154,7 +154,7 @@ parseFile.single("cover"),
 
       const fileAsString = fileAsBuffer.toString();
 
-      let fileAsJSONArray = JSON.parse(fileAsString);
+      const fileAsJSONArray = JSON.parse(fileAsString);
 
       const blogIndex = fileAsJSONArray.findIndex(
         (blog) => blog.id === req.params.id
@@ -162,7 +162,7 @@ parseFile.single("cover"),
       if (!blogIndex == -1) {
         res
           .status(404)
-          .send({ message: `Author with ${req.params.id} is not found!` });
+          .send({ message: `Blog with ${req.params.id} is not found!` });
       }
       const previousBlogData = fileAsJSONArray[blogIndex];
       const changedBlog = {

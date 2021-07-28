@@ -224,7 +224,7 @@ parseFile.single("avatar"),
 
       const fileAsString = fileAsBuffer.toString();
 
-      let fileAsJSONArray = JSON.parse(fileAsString);
+      const fileAsJSONArray = JSON.parse(fileAsString);
 
       const authorIndex = fileAsJSONArray.findIndex(
         (author) => author.id === req.params.id
