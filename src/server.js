@@ -7,6 +7,9 @@ import { join } from "path"
 import cors from "cors";
 import path, { dirname } from "path";
 
+// import env from "dotenv"
+// import dotenv from 'dotenv'
+
 import { fileURLToPath } from "url";
 // IMPORT CORS
 
@@ -33,11 +36,63 @@ const __dirname = dirname(__filename);
 
 const publicDirectory = path.join(__dirname, "../Client");
 
-const server = express();
-server.use(express.json());
-server.use(cors());
 
-const PORT = 3000;
+
+
+
+const server = express();
+
+// const { PORT } = process.env;
+
+// const whiteList = ["http://localhost:3000"];
+
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
+//       callback(null, true);
+//     } else {
+//       const error = new Error("Not allowed by cors!");
+//       error.status = 403;
+//       callback(error);
+//     }
+//   },
+// };
+
+
+
+
+const PORT = process.env.PORT || 3000;
+
+// const whitelist = [process.env.PORT]
+
+// server.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || whitelist.indexOf(origin) !== -1) {
+//         // origin is in the list therefore it is allowed
+//         callback(null, true)
+//       } else {
+//         // origin is not in the list then --> ERROR
+//         callback(new Error("Not allowed by cors!"))
+//       }
+//     },
+//   })
+// )
+
+
+server.use(express.json());
+// server.use(cors(corsOptions));
+
+
+
+
+
+
+// server.use(cors());
+
+
+
+
 
 
 

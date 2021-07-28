@@ -3,7 +3,7 @@ import { Row, Col, Image } from "react-bootstrap";
 import "./styles.css";
 export default class BlogAuthor extends Component {
   render() {
-    const { nameAuth, avatar, authID } = this.props;
+    const { nameAuth, avatar } = this.props;
     return (
       <Row>
         <Col xs={2}>

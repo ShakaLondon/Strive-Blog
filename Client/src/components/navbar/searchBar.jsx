@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Container, Navbar, Button, Form, FormControl, InputGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import logo from "../../assets/logo.png";
+import { Button, FormControl, InputGroup } from "react-bootstrap";
+// import { Link } from "react-router-dom";
+// import logo from "../../assets/logo.png";
 import BlogListSearch from "../blog/blog-list/index-search.jsx"
 import "./styles.css";
 
@@ -68,7 +68,7 @@ get renderBlogs() {
   render() {
     return (
       <div class="container-fluid px-0">
-        <InputGroup className=" d-inline-flex py-3 mt-1 w-100 search-bar-nav" className={`containersearch${this.props.showSearch ? "show" : ""}`}>
+        <InputGroup className={`d-inline-flex py-3 mt-1 w-100 search-bar-nav containersearch${this.props.showSearch ? "show" : ""}`}>
     <FormControl
       type="text" placeholder="Search blogs, authors and categories..." className="search-bar-nav mr-sm-2 my-3" value={this.props.searchInput} onChange={this.onChangeHandler}
     />

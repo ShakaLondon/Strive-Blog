@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Navbar, Button, Form, FormControl } from "react-bootstrap";
+import { Container, Navbar, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import SearchBar from "./searchBar.jsx";

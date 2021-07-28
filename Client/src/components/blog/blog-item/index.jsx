@@ -25,7 +25,7 @@ export default class BlogItem extends Component {
 
 
   render() {
-    const { title, category, cover, author, id, content, } = this.props;
+    const { id } = this.props;
 
     return (
       <Link to={`/blogs/${id}`} className="blog-link">
