@@ -45,7 +45,7 @@ const PORT = process.env.PORT || 3000;
 
 // const { PORT } = process.env;
 
-const whiteList = ["http://localhost:3001"];
+const whiteList = [process.env.FRONTEND_URL, process.env.FRONTEND_PROD_URL, process.env.REACT_APP_API_URL];
 
 const corsOptions = {
   origin: (origin, callback) => {
