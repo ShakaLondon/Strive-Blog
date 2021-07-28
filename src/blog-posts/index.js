@@ -11,7 +11,7 @@ import uniqid from "uniqid";
 // ASIGN ID TO JSON ENTRY
 
 import { userValidationRules, searchValidationRules, validate } from "./validation.js"
-import { parseFile, coverUploadFile } from "../utils/upload/index.js";
+import { parseFile } from "../utils/upload-cloud/index.js";
 // import { validationResult } from "express-validator";
 // BLOG POST VALIDATION CHAIN CHECKS ENTRY TYPE
 
