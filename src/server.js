@@ -45,7 +45,7 @@ const PORT = process.env.PORT || 3000;
 
 // const { PORT } = process.env;
 
-const whiteList = [process.env.FRONTEND_URL, process.env.FRONTEND_PROD_URL, process.env.REACT_APP_API_URL, "http://localhost:3000/blogs"];
+const whiteList = [process.env.FRONTEND_URL, process.env.FRONTEND_PROD_URL, process.env.REACT_APP_API_URL ];
 
 const corsOptions = {
   origin: (origin, callback) => {
