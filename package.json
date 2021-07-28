@@ -20,8 +20,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node -r dotenv/config src/server.js",
-    "dev": "nodemon -r dotenv/config src/server.js"
+    "dev": "node -r dotenv/config src/server.js",
+    "start": "nodemon -r dotenv/config src/server.js"
   },
   "repository": {
     "type": "git",

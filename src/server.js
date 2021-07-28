@@ -63,7 +63,7 @@ const server = express();
 
 const PORT = process.env.PORT || 3000;
 
-// const whitelist = [process.env.PORT]
+// const whitelist = [process.env.FRONTEND_URL, process.env.FRONTEND_PROD_URL, process.env.REACT_APP_API_URL]
 
 // server.use(
 //   cors({
