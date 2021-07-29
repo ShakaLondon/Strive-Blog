@@ -36,7 +36,7 @@ const __dirname = dirname(__filename);
 
 // import { getCurrentFolderPath } from "../src/lib/fs-tools.js"
 
-const publicDirectory = path.join(__dirname, 'Client');
+const publicDirectory = path.join(__dirname, 'public');
 
 
 
