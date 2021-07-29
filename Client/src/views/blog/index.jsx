@@ -34,7 +34,7 @@ class BlogPage extends Component {
     // componentDidMount is the PERFECT PLACE for our fetch
     // so here we're going to put our fetch()
     try {
-      const apiURL = process.env.REACT_APP_BE_URL
+      const apiURL = process.env.REACT_APP_API_URL
         
         let response = await fetch(`${apiURL}/blogs/${id}`)
         console.log(response)

@@ -173,7 +173,8 @@ export default class NewBlogPost extends Component {
 
   if (this.state.form !== null && this.state.blogID !== null) {
     try {
-      let response = await fetch(`http://localhost:3000/blogs/${this.state.blogID}/cover`, {
+      const apiURL = process.env.REACT_APP_API_URL
+      let response = await fetch(`${apiURL}/blogs/${this.state.blogID}/cover`, {
           method: 'POST',
           body: this.state.form,
           // headers: {

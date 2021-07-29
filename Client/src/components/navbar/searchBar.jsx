@@ -28,7 +28,7 @@ search = async (val) => {
   this.setState({ loading: true });
   // const res = await axios(`http://localhost:3000/blogs/${id}`;
   // const blogs = await res.data.results;
-  const apiURL = process.env.REACT_APP_BE_URL
+  const apiURL = process.env.REACT_APP_API_URL
 
   let response = await fetch(`${apiURL}/blogs/search?searchQuery=${val}`, {
     method: 'GET',
