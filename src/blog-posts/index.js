@@ -259,15 +259,31 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
     const fileAsJSONArray = JSON.parse(fileAsString);
 
     const blog = fileAsJSONArray.find((blog) => blog.id === req.params.id);
-    if (!blog) {
-      res
-        .status(404)
-        .send({ message: `blog with ${req.params.id} is not found!` });
-    }
-    const pdfStream = await generateBlogPDF(blog);
-    res.setHeader("Content-Type", "application/pdf");
-    pdfStream.pipe(res);
-    pdfStream.end();
+    // if (!blog) {
+    //   res
+    //     .status(404)
+    //     .send({ message: `blog with ${req.params.id} is not found!` });
+    // }
+    // const pdfStream = await generateBlogPDF(blog);
+    // res.setHeader("Content-Type", "application/pdf");
+    // pdfStream.pipe(res);
+    // pdfStream.end();
+
+    if(blog) {
+            
+      res.setHeader("Content-Disposition", `attachment; filename=${blog.title}_blog.pdf`)
+      
+      const source = await generateBlogPDF(blog)
+      
+      const destination = res
+      
+      pipeline(source, destination, err => {
+          if(err) next(err)
+      })
+  } else {
+      next(createError(404, `Profile with _id ${profileId} Not Found!`))
+  }
+
   } catch (error) {
     res.send(500).send({ message: error.message });
   }

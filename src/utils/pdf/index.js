@@ -34,6 +34,11 @@ export const generateBlogPDF = async (blog) => {
     ],
   };
 
-  const pdfDoc = printer.createPdfKitDocument(docDefinition);
-  return pdfDoc;
+  // const pdfDoc = printer.createPdfKitDocument(docDefinition);
+  // return pdfDoc;
+
+  const pdfReadableStream = printer.createPdfKitDocument(docDefinition, {})
+    pdfReadableStream.end()
+    console.log(pdfReadableStream)
+    return pdfReadableStream
 };
