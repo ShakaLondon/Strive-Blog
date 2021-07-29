@@ -21,8 +21,8 @@ export default class BlogList extends Component {
     // so here we're going to put our fetch()
     try {
         
-        
-        let response = await fetch('http://localhost:3000/blogs')
+        const apiURL = process.env.REACT_APP_BE_URL
+        let response = await fetch(`${apiURL}/blogs`)
         console.log(response)
         // this is happening AFTER the initial render invocation
         let newPosts = await response.json()

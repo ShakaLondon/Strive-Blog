@@ -34,9 +34,9 @@ class BlogPage extends Component {
     // componentDidMount is the PERFECT PLACE for our fetch
     // so here we're going to put our fetch()
     try {
+      const apiURL = process.env.REACT_APP_BE_URL
         
-        
-        let response = await fetch(`http://localhost:3000/blogs/${id}`)
+        let response = await fetch(`${apiURL}/blogs/${id}`)
         console.log(response)
         // this is happening AFTER the initial render invocation
         let newPosts = await response.json()
