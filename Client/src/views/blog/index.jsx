@@ -107,12 +107,13 @@ componentDidUpdate = async (prevProps) => {
 
             <div dangerouslySetInnerHTML={{ __html: this.state.blog.content }}></div>
           </Container>
-          <Form.Group className="d-flex mt-3 justify-content-end">
+          <Form.Group className="d-flex mt-3 justify-content-start">
             <Button
               type="submit"
               size="lg"
               variant="dark"
-              style={{ marginLeft: "1em" }}
+              className="d-flex"
+              // style={{ marginLeft: "1em" }}
               onClick={e => this.handleSubmit(e)}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
