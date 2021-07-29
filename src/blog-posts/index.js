@@ -11,6 +11,7 @@ import uniqid from "uniqid";
 // ASIGN ID TO JSON ENTRY
 
 import { generateBlogPDF } from "../utils/pdf/index.js"
+// import { pdfStream } from "pdf-stream"
 
 import { userValidationRules, searchValidationRules, validate } from "./validation.js"
 import { parseFile } from "../utils/upload-cloud/index.js";

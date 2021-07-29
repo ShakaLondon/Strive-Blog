@@ -1,7 +1,7 @@
 import express from "express";
 // IMPORT EXPRESS SERVER
 
-import { join } from "path"
+// import { join } from "path"
 // create routes to folders
 
 import cors from "cors";
@@ -15,6 +15,8 @@ import { fileURLToPath } from "url";
 
 import listEndpoints from "express-list-endpoints";
 // SHOW API ENDPOINTS
+
+
 
 // BASIC SERVER CREATION
 // REMEMBER TO UPDATE START SCRIPT IN PACKAGE JSON
