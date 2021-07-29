@@ -5,6 +5,7 @@ import fs from "fs";
 
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import { pipeline } from 'stream'
 // USE TO LOCATE FILE
 
 import uniqid from "uniqid";
@@ -281,7 +282,7 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
           if(err) next(err)
       })
   } else {
-      next(createError(404, `Profile with _id ${profileId} Not Found!`))
+      next(createError(404, `Blog with _id ${req.params.id} Not Found!`))
   }
 
   } catch (error) {
