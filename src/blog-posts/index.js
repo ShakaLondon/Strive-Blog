@@ -10,6 +10,8 @@ import { fileURLToPath } from "url";
 import uniqid from "uniqid";
 // ASIGN ID TO JSON ENTRY
 
+import { generateBlogPDF } from "../utils/pdf/index.js"
+
 import { userValidationRules, searchValidationRules, validate } from "./validation.js"
 import { parseFile } from "../utils/upload-cloud/index.js";
 // import { validationResult } from "express-validator";
@@ -242,6 +244,29 @@ blogsRouter.delete("/:blogid", async (req, res, next) => {
 
     res.status(204).send();
     
+  } catch (error) {
+    res.send(500).send({ message: error.message });
+  }
+});
+
+blogsRouter.get("/:id/pdf", async (req, res, next) => {
+  try {
+    const fileAsBuffer = fs.readFileSync(blogsFilePath);
+
+    const fileAsString = fileAsBuffer.toString();
+
+    const fileAsJSONArray = JSON.parse(fileAsString);
+
+    const blog = fileAsJSONArray.find((blog) => blog.id === req.params.id);
+    if (!blog) {
+      res
+        .status(404)
+        .send({ message: `blog with ${req.params.id} is not found!` });
+    }
+    const pdfStream = await generateBlogPDF(blog);
+    res.setHeader("Content-Type", "application/pdf");
+    pdfStream.pipe(res);
+    pdfStream.end();
   } catch (error) {
     res.send(500).send({ message: error.message });
   }
