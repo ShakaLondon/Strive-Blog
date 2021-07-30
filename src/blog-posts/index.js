@@ -273,7 +273,9 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
 
     if(blog) {
 
-      const blogname = blog.title.replaceAll("\\s+","_")
+      const blogO = blog.title
+
+      const blogname = blogO.replaceAll("\\s+","_")
             
       res.setHeader("Content-Disposition", `attachment; filename=${blogname}_blog.pdf`)
       
