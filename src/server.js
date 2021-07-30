@@ -36,7 +36,7 @@ const __dirname = dirname(__filename);
 
 // import { getCurrentFolderPath } from "../src/lib/fs-tools.js"
 
-const publicDirectory = path.join(__dirname, 'Client');
+const publicDirectory = path.join(__dirname, '../Client');
 
 
 
@@ -115,7 +115,7 @@ server.use("/blogs", blogsRouter);
 // });
 
 server.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, 'index.js'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // TELL SERVER YOU WANT TO USE THIS
