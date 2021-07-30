@@ -114,8 +114,8 @@ server.use("/blogs", blogsRouter);
 //   res.sendFile(path.join(__dirname, '../public/index.html'));
 // });
 
-server.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '../Client/src/App.js'));
+server.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname, '../Client/src/index.html'));
 });
 
 // TELL SERVER YOU WANT TO USE THIS
