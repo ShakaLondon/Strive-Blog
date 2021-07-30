@@ -114,13 +114,14 @@ server.use("/blogs", blogsRouter);
 //   res.sendFile(path.join(__dirname, '../public/index.html'));
 // });
 
-server.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname, '../Client/public/index.html'));
-});
 
 // TELL SERVER YOU WANT TO USE THIS
 
 server.use(errorHandler)
+
+server.get('/*', function(req, res) {
+  res.sendFile(path.join(__dirname, '../Client/public/index.html'));
+});
 
 // MIDDLEWARES
 

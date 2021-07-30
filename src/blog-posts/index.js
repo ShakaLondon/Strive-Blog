@@ -269,6 +269,7 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
     // res.setHeader("Content-Type", "application/pdf");
     // pdfStream.pipe(res);
     // pdfStream.end();
+    console.log(blog)
 
     if(blog) {
             
