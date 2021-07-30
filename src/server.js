@@ -110,8 +110,12 @@ server.use("/blogs", blogsRouter);
 // server.use("/blogs", filesRouter)
 // server.use("/authors/:id/blogs", authorByBlogs),
 
+// server.get('/', function(req, res) {
+//   res.sendFile(path.join(__dirname, '../public/index.html'));
+// });
+
 server.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '../../Client/public/index.html'));
+  res.sendFile(path.join(__dirname, 'index.js'));
 });
 
 // TELL SERVER YOU WANT TO USE THIS
