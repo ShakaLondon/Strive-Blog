@@ -117,6 +117,70 @@ userValidationRules(),
   }
 });
 
+authorsRouter.get("/CSV", async (req, res, next) => {
+  try {
+
+    // const userName = req.params.userName
+
+    // console.log(userName)
+
+    // const userSearch = String(userName)
+
+    // console.log(userSearch)
+
+    let authorsList 
+      const fileAsBuffer = fs.readFileSync(authorsFilePath);
+      const fileAsString = fileAsBuffer.toString();
+      const fileAsJSON = JSON.parse(fileAsString);
+      authorsList = fileAsJSON
+      // res.send(fileAsJSON);
+
+    if (authorsList) {
+
+    let csv
+    console.log("here1")
+    const fields = ["name", "surname", "email", "dateOfBirth", "avatar"]
+    const opts = { fields }
+
+    
+
+    // const expByUser = await ExperienceModel.find({ username: { $in: userSearch }}, 
+    // function(err, experiences) {
+    //   if (err) {
+    //     res.send(err);
+    //   } else {
+    //     let csv
+    //     console.log("here1")
+    //     const fields = ["role", "company", "startDate", "endDate", "description", "area", "username", "image"]
+    //     const opts = { fields }
+    //     // const parser = new Parser(opts)
+    try {
+      csv = parse(authorsList, opts);
+      console.log(csv)
+
+      if(csv) {
+
+        res.setHeader("Content-Disposition", `attachment; filename=authors-csv.csv`)
+        res.set("Content-Type", "text/csv")
+        res.status(200).send(csv)
+
+        const source = csv
+        const destination = res
+        
+        pipeline(source, destination, err => {
+            if(err) next(err)
+        })
+    } else {
+        next(createError(404, `Cannot create author CSV`))
+    }} catch (err) {
+      res.send(500).send({ message: error.message });
+    }
+  }
+    } catch (err) {
+      res.send(500).send({ message: error.message });
+    }
+  })
+
 // GET ONE AUTHOR
 authorsRouter.get('/:id/blogs', async(req, res, next)=>{
 
@@ -472,69 +536,7 @@ authorsRouter.get("/:id/blogs", async (req, res, next) => {
   }
 });
 
-authorsRouter.get("/CSV", async (req, res, next) => {
-  try {
 
-    // const userName = req.params.userName
-
-    // console.log(userName)
-
-    // const userSearch = String(userName)
-
-    // console.log(userSearch)
-
-    let authorsList 
-      const fileAsBuffer = fs.readFileSync(authorsFilePath);
-      const fileAsString = fileAsBuffer.toString();
-      const fileAsJSON = JSON.parse(fileAsString);
-      authorsList = fileAsJSON
-      // res.send(fileAsJSON);
-
-    if (authorsList) {
-
-    let csv
-    console.log("here1")
-    const fields = ["name", "surname", "email", "dateOfBirth", "avatar"]
-    const opts = { fields }
-
-    
-
-    // const expByUser = await ExperienceModel.find({ username: { $in: userSearch }}, 
-    // function(err, experiences) {
-    //   if (err) {
-    //     res.send(err);
-    //   } else {
-    //     let csv
-    //     console.log("here1")
-    //     const fields = ["role", "company", "startDate", "endDate", "description", "area", "username", "image"]
-    //     const opts = { fields }
-    //     // const parser = new Parser(opts)
-    try {
-      csv = parse(authorsList, opts);
-      console.log(csv)
-
-      if(csv) {
-
-        res.setHeader("Content-Disposition", `attachment; filename=authors-csv.csv`)
-        res.set("Content-Type", "text/csv")
-        res.status(200).send(csv)
-
-        const source = csv
-        const destination = res
-        
-        pipeline(source, destination, err => {
-            if(err) next(err)
-        })
-    } else {
-        next(createError(404, `CSV for ${userSearch} Not Found!`))
-    }} catch (err) {
-      res.send(500).send({ message: error.message });
-    }
-  }
-    } catch (err) {
-      res.send(500).send({ message: error.message });
-    }
-  })
 
 
 
