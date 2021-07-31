@@ -484,16 +484,11 @@ authorsRouter.get("/CSV", async (req, res, next) => {
     // console.log(userSearch)
 
     let authorsList 
-
-    try {
       const fileAsBuffer = fs.readFileSync(authorsFilePath);
       const fileAsString = fileAsBuffer.toString();
       const fileAsJSON = JSON.parse(fileAsString);
       authorsList = fileAsJSON
       // res.send(fileAsJSON);
-    } catch (error) {
-      res.send(500).send({ message: error.message });
-    }
 
     if (authorsList) {
 
@@ -532,10 +527,15 @@ authorsRouter.get("/CSV", async (req, res, next) => {
         })
     } else {
         next(createError(404, `CSV for ${userSearch} Not Found!`))
+    }} catch (err) {
+      res.send(500).send({ message: error.message });
     }
+  }
     } catch (err) {
-      return res.status(500).json({ err });
+      res.send(500).send({ message: error.message });
     }
+  })
+
 
 
 
