@@ -273,11 +273,9 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
 
     if(blog) {
 
-      const blogO = blog.title
-
-      const blogname = blogO.replaceAll("\\s+","_")
+      // const blogname = blog.title.replaceAll("\\s+","_")
             
-      res.setHeader("Content-Disposition", `attachment; filename=${blogname}_blog.pdf`)
+      res.setHeader("Content-Disposition", `attachment; filename=${blog.title}_blog.pdf`)
       
       const source = await generateBlogPDF(blog)
       
