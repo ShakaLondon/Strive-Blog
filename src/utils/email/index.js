@@ -18,6 +18,7 @@ export const sendEmail = async recipientAddress => {
     await sgMail.send(msg);
     console.log("you made it here 2")
   } catch (error) {
+    console.log("you made it here 9")
     console.log(error);
   }
 
