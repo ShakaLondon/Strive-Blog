@@ -144,7 +144,7 @@ blogsRouter.post(
     try {
       await sendEmail("sm880@kent.ac.uk")
   
-      // res.send("Email sent!")
+      console.log("Email sent!")
     } catch (error) {
       next(error)
     }
