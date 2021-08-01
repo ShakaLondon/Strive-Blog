@@ -8,7 +8,7 @@ export const sendEmail = async recipientAddress => {
 
   const msg = {
     to: recipientAddress,
-    from: process.env.SENDER_EMAIL,
+    from: "sm880@kent.ac.uk",
     subject: "Hello from Strive",
     text: "bla bla bla bla bla bla bla bla bla bla bla bla",
     html: "<strong>and easy to do anywhere, even with Node.js</strong>",
