@@ -147,6 +147,7 @@ blogsRouter.post(
   
       console.log("Email sent!")
     } catch (error) {
+      console.log("you made it here 4")
       next(error)
     }
     
