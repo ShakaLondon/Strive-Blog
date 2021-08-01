@@ -4,6 +4,8 @@ export const sendEmail = async (recipientAddress) => {
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
+  console.log(process.env.SENDGRID_API_KEY)
+
   console.log("you made it here 1")
 
   const msg = {
