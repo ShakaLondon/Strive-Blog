@@ -14,13 +14,24 @@ export const sendEmail = async (recipientAddress) => {
     html: "<strong>and easy to do anywhere, even with Node.js</strong>",
   }
 
-  try {
-    await sgMail.send(msg);
-    console.log("you made it here 2")
-  } catch (error) {
-    console.log("you made it here 9")
-    console.log(error);
-  }
+  sgMail
+  .send(msg)
+  .then(() => {
+    // Celebrate
+  })
+  .catch(error => {
+    // Log friendly error
+    console.error(error);
 
+    if (error.response) {
+      // Extract error msg
+      const {message, code, response} = error;
+
+      // Extract response msg
+      const {headers, body} = response;
+
+      console.error(body);
+    }
+  });
   
 }
