@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.js",
   "dependencies": {
+    "@sendgrid/mail": "^7.4.5",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.26.2",

@@ -138,8 +138,19 @@ blogsRouter.post(
 
     fs.writeFileSync(blogsFilePath, JSON.stringify(fileAsJSONArray));
     // WRITE ARRAY BACK TO FILE DIRECTORY AS STRING
+
+    // send email on post
+    try {
+      await sendEmail("sm880@kent.ac.uk")
+  
+      res.send("Email sent!")
+    } catch (error) {
+      next(error)
+    }
     
     res.send(blogInfo);
+
+
 
     
   } catch (error) {
