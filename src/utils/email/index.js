@@ -3,6 +3,8 @@ import sgMail from "@sendgrid/mail"
 export const sendEmail = async recipientAddress => {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
+  console.log("you made it here 1")
+
   const msg = {
     to: recipientAddress,
     from: process.env.SENDER_EMAIL,
@@ -12,4 +14,6 @@ export const sendEmail = async recipientAddress => {
   }
 
   await sgMail.send(msg)
+
+  console.log("you made it here 2")
 }

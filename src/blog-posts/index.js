@@ -142,6 +142,7 @@ blogsRouter.post(
 
     // send email on post
     try {
+      console.log("you made it here 3")
       await sendEmail("sm880@kent.ac.uk")
   
       console.log("Email sent!")
