@@ -143,10 +143,13 @@ blogsRouter.post(
     // send email on post
     try {
       console.log("you made it here 3")
-      await sendEmail("sm880@kent.ac.uk")
-
+      const emailresult = await sendEmail("sm880@kent.ac.uk")
+      
+      if (emailresult){
+      console.log(emailresult)
       res.send(blogInfo)
   
+      }
       console.log("Email sent!")
     } catch (error) {
       console.log("you made it here 4")
