@@ -125,7 +125,7 @@ export default class NewBlogPost extends Component {
     console.log(this.state.form)
 
     try {
-      const apiURL = process.env.REACT_APP_BE_URL
+      const apiURL = process.env.REACT_APP_API_URL
       let response = await fetch(`${apiURL}/blogs`, {
           method: 'POST',
           body: JSON.stringify(this.state.blogPost),
