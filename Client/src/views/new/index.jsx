@@ -131,7 +131,7 @@ export default class NewBlogPost extends Component {
           body: JSON.stringify(this.state.blogPost),
           headers: {
               'Content-type': 'application/json',
-              'Access-Control-Allow-Origin': 'https://strive-blog-rho.vercel.app'
+              'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com'
           }
       })
       console.log(response.ok)

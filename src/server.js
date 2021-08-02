@@ -49,44 +49,44 @@ const PORT = process.env.PORT || 3000;
 
 const whiteList = [process.env.FRONTEND_URL, process.env.FRONTEND_PROD_URL, process.env.REACT_APP_API_URL ];
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    //   console.log({origin})
-    if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
-      callback(null, true);
-    //   if the origin is in the whitelist then loading page if not then err
-    } else {
-      const error = new Error("Not allowed by cors!");
-      error.status = 403;
-      callback(error);
-    }
-  },
-};
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     //   console.log({origin})
+//     if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
+//       callback(null, true);
+//     //   if the origin is in the whitelist then loading page if not then err
+//     } else {
+//       const error = new Error("Not allowed by cors!");
+//       error.status = 403;
+//       callback(error);
+//     }
+//   },
+// };
 
 
 
-
+server.use(express.json());
 
 
 // const whitelist = [process.env.FRONTEND_URL, process.env.FRONTEND_PROD_URL, process.env.REACT_APP_API_URL]
 
-// server.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       if (!origin || whitelist.indexOf(origin) !== -1) {
-//         // origin is in the list therefore it is allowed
-//         callback(null, true)
-//       } else {
-//         // origin is not in the list then --> ERROR
-//         callback(new Error("Not allowed by cors!"))
-//       }
-//     },
-//   })
-// )
+server.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || whiteList.indexOf(origin) !== -1) {
+        // origin is in the list therefore it is allowed
+        callback(null, true)
+      } else {
+        // origin is not in the list then --> ERROR
+        callback(new Error("Not allowed by cors!"))
+      }
+    },
+  })
+)
 
 
-server.use(express.json());
-server.use(cors(corsOptions));
+
+// server.use(cors(corsOptions));
 
 
 
