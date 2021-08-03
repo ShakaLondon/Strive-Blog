@@ -178,9 +178,10 @@ export default class NewBlogPost extends Component {
       let response = await fetch(`${apiURL}/blogs/${this.state.blogID}/cover`, {
           method: 'POST',
           body: this.state.form,
-          // headers: {
-          //     'Content-type': 'multipart/form-data'
-          // }
+          headers: {
+              'Content-type': 'multipart/form-data',
+              'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/blogs'
+          }
       })
       console.log(response.ok) // the ok property from the fetch() is going to tell you if the operation was successfull
       if (response.ok) {
