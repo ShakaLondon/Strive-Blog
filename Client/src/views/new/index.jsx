@@ -130,7 +130,7 @@ export default class NewBlogPost extends Component {
           method: 'POST',
           headers: {
             'Content-type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/'
+            'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/blogs/'
         },
           body: JSON.stringify(this.state.blogPost)
           
@@ -180,7 +180,7 @@ export default class NewBlogPost extends Component {
           method: 'POST',
           headers: {
             // 'Content-type': 'multipart/form-data',
-            'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/'
+            'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/blogs/'
         },
           body: this.state.form
           
