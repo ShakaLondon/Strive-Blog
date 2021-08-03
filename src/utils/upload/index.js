@@ -44,7 +44,7 @@ export const userUploadFile = (req, res, next) => {
     const pathToFile = path.join(userDirectory, fileName);
     fs.writeFileSync(pathToFile, buffer);
     console.log(pathToFile)
-    const link = `http://localhost:3000/public/img/users/${fileName}`;
+    const link = `https://localhost:3000/public/img/users/${fileName}`;
     req.file = link;
     next();
   } catch (error) {
@@ -64,7 +64,7 @@ export const coverUploadFile = (req, res, next) => {
     const pathToFile = path.join(coverDirectory, fileName);
     fs.writeFileSync(pathToFile, buffer);
     console.log(pathToFile)
-    const link = `http://localhost:3000/public/img/covers/${fileName}`;
+    const link = `https://localhost:3000/public/img/covers/${fileName}`;
     req.file = link;
     next();
   } catch (error) {
