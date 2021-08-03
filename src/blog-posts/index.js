@@ -293,9 +293,10 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
     if(blog) {
 
       // const blogname = blog.title.replaceAll("\\s+","_")
-            
+      try{
+
       res.setHeader("Content-Disposition", `attachment; filename=${blog.title}_blog.pdf`)
-      
+
       const source = await generateBlogPDF(blog)
       
       const destination = res
@@ -303,6 +304,12 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
       pipeline(source, destination, err => {
           if(err) next(err)
       })
+
+    }
+    catch(err){
+       return next(err);
+   }
+
   } else {
       next(createError(404, `Blog with _id ${req.params.id} Not Found!`))
   }
