@@ -179,7 +179,7 @@ export default class NewBlogPost extends Component {
           method: 'POST',
           body: this.state.form,
           headers: {
-              'Content-type': 'multipart/form-data',
+              // 'Content-type': 'multipart/form-data',
               'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/blogs'
           }
       })
