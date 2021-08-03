@@ -57,6 +57,7 @@ componentDidUpdate = async (prevProps) => {
     try {
 
       const { id } = this.props.match.params;
+      const apiURL = process.env.REACT_APP_API_URL
         
         
       let response = await fetch(`${apiURL}/blogs/${id}`)
