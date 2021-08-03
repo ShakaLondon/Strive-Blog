@@ -18,7 +18,7 @@ export default class NewBlogPost extends Component {
       author: {
         nameAuth: "",
         authID: "",
-        avatar: "http://localhost:3000/public/img/users/default.jpeg"
+        avatar: "https://localhost:3000/public/img/users/default.jpeg"
       },
       content: "",
       readTime: {
@@ -26,7 +26,7 @@ export default class NewBlogPost extends Component {
         unit: "",
         value: 0
       },
-      cover: "http://localhost:3000/public/img/covers/default-cover.png" },
+      cover: "https://localhost:3000/public/img/covers/default-cover.png" },
     form: null,
     blogID: null };
     // SET STATES FOR JSON BODY AND FORM INPUT
@@ -147,7 +147,7 @@ export default class NewBlogPost extends Component {
               author: {
                 nameAuth: "",
                 authID: "",
-                avatar: "http://localhost:3000/public/img/users/default.jpeg"
+                avatar: "https://localhost:3000/public/img/users/default.jpeg"
               },
               content: "",
               readTime: {
@@ -155,7 +155,7 @@ export default class NewBlogPost extends Component {
                 unit: "",
                 value: 0
               },
-              cover: "http://localhost:3000/public/img/covers/default-cover.png"},
+              cover: "https://localhost:3000/public/img/covers/default-cover.png"},
               blogID: newBlog.id
           })
           alert('Success! Your blog has been posted: ' + this.state.blogPost.title);
