@@ -128,11 +128,12 @@ export default class NewBlogPost extends Component {
       const apiURL = process.env.REACT_APP_API_URL
       let response = await fetch(`${apiURL}/blogs`, {
           method: 'POST',
-          body: JSON.stringify(this.state.blogPost),
           headers: {
-              'Content-type': 'application/json',
-              'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/'
-          }
+            'Content-type': 'application/json',
+            'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/'
+        },
+          body: JSON.stringify(this.state.blogPost)
+          
       })
       console.log(response.ok)
       let newBlog = await response.json()
@@ -177,11 +178,12 @@ export default class NewBlogPost extends Component {
       const apiURL = process.env.REACT_APP_API_URL
       let response = await fetch(`${apiURL}/blogs/${this.state.blogID}/cover`, {
           method: 'POST',
-          body: this.state.form,
           headers: {
-              // 'Content-type': 'multipart/form-data',
-              'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/'
-          }
+            // 'Content-type': 'multipart/form-data',
+            'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/'
+        },
+          body: this.state.form
+          
       })
       console.log(response.ok) // the ok property from the fetch() is going to tell you if the operation was successfull
       if (response.ok) {
