@@ -131,7 +131,7 @@ export default class NewBlogPost extends Component {
           body: JSON.stringify(this.state.blogPost),
           headers: {
               'Content-type': 'application/json',
-              'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/blogs'
+              'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/'
           }
       })
       console.log(response.ok)
@@ -180,7 +180,7 @@ export default class NewBlogPost extends Component {
           body: this.state.form,
           headers: {
               // 'Content-type': 'multipart/form-data',
-              'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/blogs'
+              'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/'
           }
       })
       console.log(response.ok) // the ok property from the fetch() is going to tell you if the operation was successfull
