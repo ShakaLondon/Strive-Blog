@@ -128,10 +128,10 @@ export default class NewBlogPost extends Component {
       const apiURL = process.env.REACT_APP_API_URL
       let response = await fetch(`${apiURL}/blogs`, {
           method: 'POST',
-          headers: {
-            'Content-type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-        },
+        //   headers: {
+        //     'Content-type': 'application/json',
+        //     'Access-Control-Allow-Origin': '*'
+        // },
           body: JSON.stringify(this.state.blogPost)
           
       })
@@ -178,10 +178,10 @@ export default class NewBlogPost extends Component {
       const apiURL = process.env.REACT_APP_API_URL
       let response = await fetch(`${apiURL}/blogs/${this.state.blogID}/cover`, {
           method: 'POST',
-          headers: {
+          // headers: {
             // 'Content-type': 'multipart/form-data',
-            'Access-Control-Allow-Origin': '*'
-        },
+            // 'Access-Control-Allow-Origin': '*'
+        // },
           body: this.state.form
           
       })

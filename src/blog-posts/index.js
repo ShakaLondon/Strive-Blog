@@ -141,22 +141,22 @@ blogsRouter.post(
     // WRITE ARRAY BACK TO FILE DIRECTORY AS STRING
 
     // send email on post
-    try {
-      console.log("you made it here 3")
-      const emailresult = await sendEmail("sm880@kent.ac.uk")
+    // try {
+    //   console.log("you made it here 3")
+    //   const emailresult = await sendEmail("sm880@kent.ac.uk")
       
-      if (emailresult){
-      console.log(emailresult)
-      res.send(blogInfo)
+    //   if (emailresult){
+    //   console.log(emailresult)
+    //   res.send(blogInfo)
   
-      }
-      console.log("Email sent!")
-    } catch (error) {
-      console.log("you made it here 4")
-      next(error)
-    }
+    //   }
+    //   console.log("Email sent!")
+    // } catch (error) {
+    //   console.log("you made it here 4")
+    //   next(error)
+    // }
     
-    // res.send(blogInfo);
+    res.send(blogInfo);
 
 
 
