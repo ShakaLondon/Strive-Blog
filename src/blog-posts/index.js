@@ -156,7 +156,7 @@ blogsRouter.post(
     //   next(error)
     // }
 
-    await sendEmail("sm880@kent.ac.uk")
+    // await sendEmail("sm880@kent.ac.uk")
     
     res.send(blogInfo);
 
@@ -205,6 +205,41 @@ parseFile.single("cover"),
     }
   }
 );
+
+blogsRouter.post("/email", async (req, res, next) => {
+  try {
+    console.log(req.body)
+
+    const { authorID } = req.body;
+
+    const fileAsBuffer = fs.readFileSync(authorsFilePath);
+    // read json file
+    const fileAsString = fileAsBuffer.toString();
+    // convert JSON to string
+    const fileAsJSONArray = JSON.parse(fileAsString);
+    // read as an array
+
+    console.log("get route")
+
+    // let albumID = req.params.id
+
+    const author = fileAsJSONArray.find(author => author.id=== authorID)
+
+    // let authorID = req.params.id
+
+if (author) {
+
+  console.log(author.email)
+
+    await sendEmail(author.email)
+
+    res.send("Email sent!")
+
+}
+  } catch (error) {
+    next(error)
+  }
+})
 
 // GET SPECIFIC BLOG POST
 blogsRouter.get("/:blogid", async (req, res, next) => {
