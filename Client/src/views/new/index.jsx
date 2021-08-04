@@ -233,6 +233,7 @@ export default class NewBlogPost extends Component {
           <Form.Group controlId="blog-category" className="mt-3">
             <Form.Label>Category</Form.Label>
             <Form.Control size="lg" as="select" value={this.state.blogPost.category} name="category" onChange={e => this.handleChange(e)} defaultValue={this.state.blogPost.category}>
+              <option value="" disabled selected hidden>Please Choose a Category...</option>
               <option value="Getting started at Strive School">Getting started at Strive School</option>
               <option value="Women in Tech">Women in Tech</option>
               <option value="Getting Hired">Getting Hired</option>
