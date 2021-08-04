@@ -130,7 +130,7 @@ export default class NewBlogPost extends Component {
           method: 'POST',
           headers: {
             'Content-type': 'application/json',
-            'Access-Control-Allow-Origin': 'https://strive-blog-m5.herokuapp.com/blogs'
+            'Access-Control-Allow-Origin': '*'
         },
           body: JSON.stringify(this.state.blogPost)
           
