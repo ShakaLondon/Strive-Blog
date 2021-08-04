@@ -155,6 +155,8 @@ blogsRouter.post(
     //   console.log("you made it here 4")
     //   next(error)
     // }
+
+    await sendEmail("sm880@kent.ac.uk")
     
     res.send(blogInfo);
 
