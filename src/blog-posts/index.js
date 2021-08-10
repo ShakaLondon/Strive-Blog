@@ -206,40 +206,40 @@ parseFile.single("cover"),
   }
 );
 
-blogsRouter.post("/email", async (req, res, next) => {
-  try {
-    console.log(req.body)
+// blogsRouter.post("/email", async (req, res, next) => {
+//   try {
+//     console.log(req.body)
 
-    const { authorID } = req.body;
+//     const { authorID } = req.body;
 
-    const fileAsBuffer = fs.readFileSync(authorsFilePath);
-    // read json file
-    const fileAsString = fileAsBuffer.toString();
-    // convert JSON to string
-    const fileAsJSONArray = JSON.parse(fileAsString);
-    // read as an array
+//     const fileAsBuffer = fs.readFileSync(authorsFilePath);
+//     // read json file
+//     const fileAsString = fileAsBuffer.toString();
+//     // convert JSON to string
+//     const fileAsJSONArray = JSON.parse(fileAsString);
+//     // read as an array
 
-    console.log("get route")
+//     console.log("get route")
 
-    // let albumID = req.params.id
+//     // let albumID = req.params.id
 
-    const author = fileAsJSONArray.find(author => author.id=== authorID)
+//     const author = fileAsJSONArray.find(author => author.id=== authorID)
 
-    // let authorID = req.params.id
+//     // let authorID = req.params.id
 
-if (author) {
+// if (author) {
 
-  console.log(author.email)
+//   console.log(author.email)
 
-    await sendEmail(author.email)
+//     await sendEmail(author.email)
 
-    res.send("Email sent!")
+//     res.send("Email sent!")
 
-}
-  } catch (error) {
-    next(error)
-  }
-})
+// }
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 // GET SPECIFIC BLOG POST
 blogsRouter.get("/:blogid", async (req, res, next) => {

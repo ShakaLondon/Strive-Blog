@@ -28,8 +28,7 @@ export default class NewBlogPost extends Component {
       },
       cover: "https://localhost:3000/public/img/covers/default-cover.png" },
     form: null,
-    blogID: null,
-    authorID: null };
+    blogID: null };
     // SET STATES FOR JSON BODY AND FORM INPUT
 
 
@@ -158,9 +157,7 @@ export default class NewBlogPost extends Component {
                 value: 0
               },
               cover: "https://localhost:3000/public/img/covers/default-cover.png"},
-              blogID: newBlog.id,
-              authorID: newBlog.author.authID
-
+              blogID: newBlog.id
           })
           alert('Success! Your blog has been posted: ' + this.state.blogPost.title);
       } else {
@@ -204,47 +201,10 @@ export default class NewBlogPost extends Component {
       // if we fall here it means we don't have connection
       // or maybe the url is not quite right
       console.log(error)
-  } finally {
-
-    if (this.state.authorID !== null) {
-      try {
-        const apiURL = process.env.REACT_APP_API_URL
-        let response = await fetch(`${apiURL}/blogs/email`, {
-            method: 'POST',
-            // headers: {
-              // 'Content-type': 'multipart/form-data',
-              // 'Access-Control-Allow-Origin': '*'
-          // },
-            body: this.state.authorID
-            
-        })
-        console.log(response.ok) // the ok property from the fetch() is going to tell you if the operation was successfull
-        if (response.ok) {
-    
-            this.setState({
-              form: null,
-              blogID: null,
-              authorID: null })
-            alert('Success! Your email has been sent');
-        } else {
-            // this is going to catch a server problem
-            // i.e: server is down, db has a problem
-            alert('Houston we had a problem, try again!')
-        }
-    } catch (error) {
-        // if we fall here it means we don't have connection
-        // or maybe the url is not quite right
-        console.log(error)
-    }
-    
-      
-    }
   }
 
     
 }}
-
-
 
     
 }
